@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "debug.h": "c",
+        "app_config.h": "c",
+        "app_mytask.h": "c",
+        "p33.h": "c",
+        "lcd_ctrl.h": "c",
+        "rtc.h": "c",
+        "rtc_alarm.h": "c",
+        "board_config.h": "c",
+        "virtual_rtc.h": "c",
+        "board_ac635n_demo_global_build_cfg.h": "c",
+        "app_time.h": "c",
+        "ioctl.h": "c",
+        "printf.h": "c",
+        "stdarg.h": "c"
+    }
+}
