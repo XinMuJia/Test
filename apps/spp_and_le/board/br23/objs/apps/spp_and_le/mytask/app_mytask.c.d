@@ -128,4 +128,5 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
   ../../../../apps/spp_and_le/include\mytask/app_time.h \
   ../../../../apps/spp_and_le/include\rtc_alarm.h \
+  ../../../../apps/spp_and_le/include\mytask/app_event.h \
   ../../../../include_lib/system\debug.h

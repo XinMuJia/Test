@@ -18,6 +18,8 @@
 #include "mytask/app_mytask.h"
 #include "mytask/lcd_ctrl.h"
 #include "asm/rtc.h"
+#include "mytask/app_event.h"
+#include "mytask/app_peripheral.h"
 
 
 #if TCFG_KWS_VOICE_RECOGNITION_ENABLE
@@ -173,13 +175,9 @@ void app_main()
         int update = 0;
         update = update_result_deal();
     }
+    Peripheral_Init(); // 初始化外设
+    app_main_init(); // app事件初始化
     Task_Init(); // 初始化自定义任务
-    // gpio_direction_output(IO_PORTB_02, 1);
-    
-    // 设置PR1为数字IO模式
-    // p33_tx_1byte(R3_OSL_CON, 0);
-    // rtc_port_pr_die(IO_PORTR_00, 1);
-    // rtc_port_pr_out(IO_PORTR_00, OUT_HIGH);
 
     // 读取值
     log_info(">>>>>>>>>>>>>>>>>app_main...\n");
@@ -299,7 +297,7 @@ void app_switch(const char *name, int action)
 
     log_info("app_exit\n");
 
-    init_intent(&it);
+    // init_intent(&it);
     app = get_current_app();
     if (app) {
         /*

@@ -11,6 +11,8 @@
 #include "mytask/lcd_ctrl.h"
 #include "mytask/app_time.h"
 #include "rtc_alarm.h"
+#include "iokey.h"
+#include "mytask/app_event.h"
 
 
 // 添加日志系统定义
@@ -38,15 +40,14 @@ extern u8 lcd_init_complete;
 
 void rtc_32k_clock_test();
 void start_rtc_clock_test();
+
+/* 消息队列 */
 void my_task(void *p)
 {
     // start_rtc_clock_test();
     while(1) {
-        log_info("Custom task running...");
-
-        // rtc_32k_clock_test();
+        printf("my_task\n");
         os_time_dly(100);
-        // OSTimeDlyHMSM(0, 0, 1, 0); // 延时1秒
     }
 }
 
@@ -153,10 +154,11 @@ void app_loop_select(void)
 
     /* 选择APP */
     while (1) {
-        loop_sel = get_check_status() - 1; //用于读取按键状态选择APP
-        log_info("APP_LOOP_SEL: %d", pump_state);
+        // loop_sel = get_check_status() - 1; 
+        loop_sel = io_get_key_value();//用于读取按键状态选择APP
+        log_info("APP_LOOP_SEL: %d", loop_sel);
         switch (loop_sel) {
-        case 0:
+        case 4:
             LCD_Clean_Safe();
             // 切换气泵状态
             pump_state = !pump_state;
@@ -173,7 +175,7 @@ void app_loop_select(void)
             press_time = 0; // 重置计时器
             break;
 
-        case 1:
+        case 5:
             // 关闭气泵(通过气压开关判断)
             if(pump_state) { // 只有在开启状态下才响应关闭
                 pump_state = 0;
@@ -239,14 +241,14 @@ void Lcd_Task(void)
     u8 last_content = 0xFF;
 
     // 设置系统时间
-    // struct sys_time new_time = {0};
-    // new_time.year = 2025;
-    // new_time.month = 1;
-    // new_time.day = 1;
-    // new_time.hour = 15;
-    // new_time.min = 13;
-    // new_time.sec = 0;
-    // set_system_time(&new_time);
+    struct sys_time new_time = {0};
+    new_time.year = 2025;
+    new_time.month = 1;
+    new_time.day = 1;
+    new_time.hour = 15;
+    new_time.min = 13;
+    new_time.sec = 0;
+    set_system_time(&new_time);
     
     while (1) {
         /* 只在 LCD 空闲时更新显示 */
@@ -293,12 +295,12 @@ void Task_Init(void)
 {
     /* os_task_create(app_main_task, (void *)0, TASK_APP_MAIN_NAME); */
     // 创建检测开机按键线程，使用任务表配置参数
-    os_task_create( PowerOnKey_Task,
-                  (void *)0,
-                  task_info_table[9].prio,
-                  task_info_table[9].stack_size,
-                  0,
-                  task_info_table[9].name);
+    // os_task_create(key_event_handler ,
+    //               (void *)0,
+    //               task_info_table[9].prio,
+    //               task_info_table[9].stack_size,
+    //               0,
+    //               task_info_table[9].name);
     // os_task_create(my_task, (void *)0, "my_task", 4, 256, 0); // 创建自定义任务线程
     os_task_create( my_task,
                     (void *)0,
@@ -314,12 +316,12 @@ void Task_Init(void)
                     0,
                     task_info_table[10].name);
 
-    os_task_create( app_loop_select,
-                    (void *)0,
-                    task_info_table[11].prio,
-                    task_info_table[11].stack_size,
-                    0,
-                    task_info_table[11].name);
+    // os_task_create( app_loop_select,
+    //                 (void *)0,
+    //                 task_info_table[11].prio,
+    //                 task_info_table[11].stack_size,
+    //                 0,
+    //                 task_info_table[11].name);
     
     task_info_add(task_info_table);   
     log_info("Task_Init Over");

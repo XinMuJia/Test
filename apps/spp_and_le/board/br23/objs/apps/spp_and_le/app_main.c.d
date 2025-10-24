@@ -126,4 +126,5 @@ objs/apps/spp_and_le/app_main.c.o: ../../../../apps/spp_and_le/app_main.c \
   ../../../../include_lib/driver/cpu/br23\asm/power/p33.h \
   ../../../../apps/spp_and_le/include\mytask/app_mytask.h \
   ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
+  ../../../../apps/spp_and_le/include\mytask/app_event.h \
   ../../../../include_lib/system\debug.h

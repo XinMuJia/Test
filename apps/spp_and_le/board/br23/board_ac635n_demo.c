@@ -268,23 +268,23 @@ u8 get_power_on_status(void)
  * @brief      获取按键状态
  * @return     按键值
  */
-u8 get_check_status(void)
-{
-    for (int i = 1; i < iokey_data.num; i++) {
-        struct iokey_port *key_port = &iokey_data.port[i];
-        if (key_port->key_value == TCFG_IOKEY_AIR_ONE_PORT_VALUE) {
-            if (gpio_read(key_port->key_type.one_io.port) == key_port->connect_way) {
-                return i; // 按键按下
-            }
-        } else if (key_port->key_value == TCFG_IOKEY_AIR_ONE_PORT_VALUE) {
-            if (gpio_read(key_port->key_type.one_io.port) == key_port->connect_way) {
-                return i; // 按键按下
-            }
-        }
-    }
+// u8 get_check_status(void)
+// {
+//     for (int i = 1; i < iokey_data.num; i++) {
+//         struct iokey_port *key_port = &iokey_data.port[i];
+//         if (key_port->key_value == TCFG_IOKEY_AIR_ONE_PORT_VALUE) {
+//             if (gpio_read(key_port->key_type.one_io.port) == key_port->connect_way) {
+//                 return i; // 按键按下
+//             }
+//         } else if (key_port->key_value == TCFG_IOKEY_AIR_ONE_PORT_VALUE) {
+//             if (gpio_read(key_port->key_type.one_io.port) == key_port->connect_way) {
+//                 return i; // 按键按下
+//             }
+//         }
+//     }
 
-    return 0; // 无按键按下
-}
+//     return 0; // 无按键按下
+// }
 
 static void alm_wakeup_isr()
 {

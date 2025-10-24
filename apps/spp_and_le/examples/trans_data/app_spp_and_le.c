@@ -298,6 +298,14 @@ static void spple_key_event_handler(struct sys_event *event)
         event_type = event->u.key.event;
         key_value = event->u.key.value;
         log_info("app_key_evnet: %d,%d\n", event_type, key_value);
+
+        // struct sys_event e;
+
+        /* 自定义按键处理 */
+        // os_taskq_post_type("key_event_handler", event, 1, &event);
+        // key_event_handler(event);
+    
+
         /*Change Case To Idle Demo*/
 #if CONFIG_APP_SPP_LE_TO_IDLE
         if (event_type == KEY_EVENT_CLICK && key_value == TCFG_ADKEY_VALUE1) {

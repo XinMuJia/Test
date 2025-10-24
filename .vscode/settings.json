@@ -13,6 +13,8 @@
         "app_time.h": "c",
         "ioctl.h": "c",
         "printf.h": "c",
-        "stdarg.h": "c"
+        "stdarg.h": "c",
+        "app_event.h": "c",
+        "event.h": "c"
     }
 }

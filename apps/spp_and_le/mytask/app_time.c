@@ -8,6 +8,7 @@
 
 
 
+
 extern struct sys_time rtc_read_test;
 
 #if TCFG_USE_VIRTUAL_RTC
@@ -252,9 +253,8 @@ void init_software_rtc(void)
     software_rtc.hour = 12;
     software_rtc.min = 0;
     software_rtc.sec = 0;
-    
 
-
+    // set_system_time(&software_rtc);
     last_sys_time_ms = sys_timer_get_ms();
     software_rtc_initialized = 1;
 
