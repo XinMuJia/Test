@@ -38,6 +38,7 @@ struct Node
     u8 pump_state; // 0: 关闭, 1: 打开
     u32 press_time;
     u32 seconds;
+    u16 id;
 } Pump_State;
 
 
@@ -83,13 +84,12 @@ void pump_time_update()
             // 超过60s自动退出
             if(Pump_State.seconds > 60) {
                 Pump_State.pump_state = 0;
-                Pump_State.press_time = 0;
                 Pump_State.seconds = 0;
                 gpio_direction_output(IO_PORTB_02, Pump_State.pump_state);
-
+                sys_timer_del(Pump_State.id); // 停止定时器
                 // 设置PR1为数字IO模式
                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
-
+                
                 // 等待LCD空闲
                 while (lcd_is_printing()) {
                     os_time_dly(10);
@@ -104,9 +104,9 @@ void pump_time_update()
 
 void handle_single_click(u8 key_value)
 {
-    while(!poweron_detected || !lcd_init_complete) {
-        os_time_dly(10); // 等待开机按键检测完成
-    }
+    // while(!poweron_detected || !lcd_init_complete) {
+    //     os_time_dly(10); // 等待开机按键检测完成
+    // }
 
     switch (key_value)
     {
@@ -115,20 +115,21 @@ void handle_single_click(u8 key_value)
             // 切换气泵状态
             Pump_State.pump_state = !Pump_State.pump_state; // 0: 关闭, 1: 打开
             gpio_direction_output(IO_PORTB_02, Pump_State.pump_state); // 控制气泵开关
-            
-            if(Pump_State.pump_state) { // 次序问题
-                rtc_port_pr_out(IO_PORTR_00, OUT_LOW); // 关闭电磁阀
+
+            if(Pump_State.pump_state) { 
+                rtc_port_pr_out(IO_PORTR_00, OUT_HIGH); // 关闭电磁阀
                 LCD_Show_String_Safe(0, 0, "Pump: ON", LCD_CONTENT_PUMP_ON);
                 LCD_Show_String_Safe(1, 0, "Time: 0 s", LCD_CONTENT_TIME);
-                sys_timer_add(NULL, pump_time_update, 1000); // 1s周期更新
+                Pump_State.id = sys_timer_add(NULL, pump_time_update, 1000); // 1s周期更新
             } else {
+                sys_timer_del(Pump_State.id); // 停止定时器
                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-                sys_timer_del(pump_time_update); // 停止定时器
 
                 rtc_port_pr_out(IO_PORTR_00, OUT_HIGH); // 打开电磁阀
                 os_time_dly(200);
                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
             }
+            
             Pump_State.seconds = 0; // 重置计时器
             break;
 
@@ -137,6 +138,7 @@ void handle_single_click(u8 key_value)
             if(Pump_State.pump_state) { // 只有在开启状态下才响应关闭
                 Pump_State.pump_state = 0;
                 gpio_direction_output(IO_PORTB_02, Pump_State.pump_state);
+                sys_timer_del(Pump_State.id); // 停止定时器
                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
 
                 // 等待LCD空闲

@@ -127,4 +127,5 @@ objs/apps/spp_and_le/app_main.c.o: ../../../../apps/spp_and_le/app_main.c \
   ../../../../apps/spp_and_le/include\mytask/app_mytask.h \
   ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
   ../../../../apps/spp_and_le/include\mytask/app_event.h \
+  ../../../../apps/spp_and_le/include\mytask/app_peripheral.h \
   ../../../../include_lib/system\debug.h
