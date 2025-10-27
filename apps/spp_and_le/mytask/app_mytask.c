@@ -44,7 +44,6 @@ void start_rtc_clock_test();
 /* 消息队列 */
 void my_task(void *p)
 {
-    // start_rtc_clock_test();
     while(1) {
         printf("my_task\n");
         os_time_dly(100);
@@ -85,146 +84,146 @@ void show_battery_level(void)
 
 
 /* 检查开机键   */
-void check_power_on_key()
-{
-#if TCFG_POWER_ON_NEED_KEY
-    u32 delay_10ms_cnt = 0;
-    while (1) {
-        clr_wdt();
-        os_time_dly(1);
-        extern u8 get_power_on_status(void);
-        if (get_power_on_status()) {
-            log_info("+");
-            delay_10ms_cnt++;
+// void check_power_on_key()
+// {
+// #if TCFG_POWER_ON_NEED_KEY
+//     u32 delay_10ms_cnt = 0;
+//     while (1) {
+//         clr_wdt();
+//         os_time_dly(1);
+//         extern u8 get_power_on_status(void);
+//         if (get_power_on_status()) {
+//             log_info("+");
+//             delay_10ms_cnt++;
             
-            // 连续按键1s以上，按键开机
-            if (delay_10ms_cnt > 100 && !poweron_detected) { //1s
-                set_key_poweron_flag(1); 
+//             // 连续按键1s以上，按键开机
+//             if (delay_10ms_cnt > 100 && !poweron_detected) { //1s
+//                 set_key_poweron_flag(1); 
 
-                // 开机
-                gpio_direction_output(IO_PORTB_11, 1);     
-                gpio_write(IO_PORTB_11, 1);
-                log_info("is poweron");
-                delay_10ms_cnt = 0;
-                poweron_detected = 1;
-                return;
-                // 关机检测：开机后继续长按2秒关机
-            } else if (delay_10ms_cnt > 200 && poweron_detected) { 
-                log_info("Power off key detected\n");
-                poweron_detected = 0;
-                delay_10ms_cnt = 0;
-                power_set_soft_poweroff();
-                gpio_direction_output(IO_PORTB_11, 0); 
-                return;
-            }
-        }
-    }
-#endif
-}
+//                 // 开机
+//                 gpio_direction_output(IO_PORTB_11, 1);     
+//                 gpio_write(IO_PORTB_11, 1);
+//                 log_info("is poweron");
+//                 delay_10ms_cnt = 0;
+//                 poweron_detected = 1;
+//                 return;
+//                 // 关机检测：开机后继续长按2秒关机
+//             } else if (delay_10ms_cnt > 200 && poweron_detected) { 
+//                 log_info("Power off key detected\n");
+//                 poweron_detected = 0;
+//                 delay_10ms_cnt = 0;
+//                 power_set_soft_poweroff();
+//                 gpio_direction_output(IO_PORTB_11, 0); 
+//                 return;
+//             }
+//         }
+//     }
+// #endif
+// }
 
-void PowerOnKey_Task(void)
-{
-    while (1) {
-        check_power_on_key();
+// void PowerOnKey_Task(void)
+// {
+//     while (1) {
+//         check_power_on_key();
 
-        os_time_dly(100);  // 避免任务频繁运行
-    }
-}
+//         os_time_dly(100);  // 避免任务频繁运行
+//     }
+// }
 
 
 /* 循环选择 */
-void app_loop_select(void)
-{
-    u8 loop_sel = 0;
-    u8 pump_state = 0; // 0: 关闭, 1: 打开
-    u32 press_time = 0;
-    u32 seconds = 0;
+// void app_loop_select(void)
+// {
+//     u8 loop_sel = 0;
+//     u8 pump_state = 0; // 0: 关闭, 1: 打开
+//     u32 press_time = 0;
+//     u32 seconds = 0;
 
-    while(!poweron_detected || !lcd_init_complete) {
-        os_time_dly(10); // 等待开机按键检测完成
-    }
+//     while(!poweron_detected || !lcd_init_complete) {
+//         os_time_dly(10); // 等待开机按键检测完成
+//     }
 
-    /* 基础配置 */
-    gpio_direction_input(IO_PORTB_04); // 配置为输入
-    gpio_direction_output(IO_PORTB_02, 0); // 初始化气泵为关闭状态
+//     /* 基础配置 */
+//     gpio_direction_input(IO_PORTB_04); // 配置为输入
+//     gpio_direction_output(IO_PORTB_02, 0); // 初始化气泵为关闭状态
 
-    // 设置PR1为数字IO模式
-    p33_tx_1byte(R3_OSL_CON, 0);
-    rtc_port_pr_die(IO_PORTR_00, 1);
+//     // 设置PR1为数字IO模式
+//     p33_tx_1byte(R3_OSL_CON, 0);
+//     rtc_port_pr_die(IO_PORTR_00, 1);
 
-    /* 选择APP */
-    while (1) {
-        // loop_sel = get_check_status() - 1; 
-        loop_sel = io_get_key_value();//用于读取按键状态选择APP
-        log_info("APP_LOOP_SEL: %d", loop_sel);
-        switch (loop_sel) {
-        case 4:
-            LCD_Clean_Safe();
-            // 切换气泵状态
-            pump_state = !pump_state;
-            if(pump_state) { // 次序问题
-                rtc_port_pr_out(IO_PORTR_00, OUT_HIGH);
-                LCD_Show_String_Safe(0, 0, "Pump: ON", LCD_CONTENT_PUMP_ON);
-                LCD_Show_String_Safe(1, 0, "Time: 0 s", LCD_CONTENT_TIME);
-            } else {
-                rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
-                LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-            }
+//     /* 选择APP */
+//     while (1) {
+//         // loop_sel = get_check_status() - 1; 
+//         loop_sel = io_get_key_value();//用于读取按键状态选择APP
+//         log_info("APP_LOOP_SEL: %d", loop_sel);
+//         switch (loop_sel) {
+//         case 4:
+//             LCD_Clean_Safe();
+//             // 切换气泵状态
+//             pump_state = !pump_state;
+//             if(pump_state) { // 次序问题
+//                 rtc_port_pr_out(IO_PORTR_00, OUT_HIGH);
+//                 LCD_Show_String_Safe(0, 0, "Pump: ON", LCD_CONTENT_PUMP_ON);
+//                 LCD_Show_String_Safe(1, 0, "Time: 0 s", LCD_CONTENT_TIME);
+//             } else {
+//                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
+//                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
+//             }
 
-            gpio_direction_output(IO_PORTB_02, pump_state);
-            press_time = 0; // 重置计时器
-            break;
+//             gpio_direction_output(IO_PORTB_02, pump_state);
+//             press_time = 0; // 重置计时器
+//             break;
 
-        case 5:
-            // 关闭气泵(通过气压开关判断)
-            if(pump_state) { // 只有在开启状态下才响应关闭
-                pump_state = 0;
-                gpio_direction_output(IO_PORTB_02, pump_state);
-                rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
+//         case 5:
+//             // 关闭气泵(通过气压开关判断)
+//             if(pump_state) { // 只有在开启状态下才响应关闭
+//                 pump_state = 0;
+//                 gpio_direction_output(IO_PORTB_02, pump_state);
+//                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
 
-                // 等待LCD空闲
-                while (lcd_is_printing()) {
-                    os_time_dly(10);
-                }
+//                 // 等待LCD空闲
+//                 while (lcd_is_printing()) {
+//                     os_time_dly(10);
+//                 }
                 
-                LCD_Clean_Safe();
-                LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-            }
-            break;
-        }
+//                 LCD_Clean_Safe();
+//                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
+//             }
+//             break;
+//         }
 
-        // 气泵运行时，每秒更新一次时间显示
-        if(pump_state) {
-            press_time++;
-            // 每1000ms(10个100ms周期)更新一次LCD显示
-            if(press_time % 10 == 0) {
-                seconds = press_time / 10;
-                LCD_Show_Number_Safe(1, 6, seconds, LCD_CONTENT_TIME);
-            }
+//         // 气泵运行时，每秒更新一次时间显示
+//         if(pump_state) {
+//             press_time++;
+//             // 每1000ms(10个100ms周期)更新一次LCD显示
+//             if(press_time % 10 == 0) {
+//                 seconds = press_time / 10;
+//                 LCD_Show_Number_Safe(1, 6, seconds, LCD_CONTENT_TIME);
+//             }
             
-            // 超过60s自动退出
-            if(seconds > 60) {
-                pump_state = 0;
-                press_time = 0;
-                seconds = 0;
-                gpio_direction_output(IO_PORTB_02, pump_state);
+//             // 超过60s自动退出
+//             if(seconds > 60) {
+//                 pump_state = 0;
+//                 press_time = 0;
+//                 seconds = 0;
+//                 gpio_direction_output(IO_PORTB_02, pump_state);
 
-                // 设置PR1为数字IO模式
-                rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
+//                 // 设置PR1为数字IO模式
+//                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
 
-                // 等待LCD空闲
-                while (lcd_is_printing()) {
-                    os_time_dly(10);
-                }
+//                 // 等待LCD空闲
+//                 while (lcd_is_printing()) {
+//                     os_time_dly(10);
+//                 }
                 
-                LCD_Clean_Safe();
-                LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-                // LCD_Show_String_Safe(1, 0, "Time: 60s", LCD_CONTENT_TIME);
-            }
-        }
-        os_time_dly(10);
-    }
-}
+//                 LCD_Clean_Safe();
+//                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
+//                 // LCD_Show_String_Safe(1, 0, "Time: 60s", LCD_CONTENT_TIME);
+//             }
+//         }
+//         os_time_dly(10);
+//     }
+// }
 
 
 void Lcd_Task(void)

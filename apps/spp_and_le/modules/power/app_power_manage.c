@@ -8,6 +8,7 @@
 #include "btstack/avctp_user.h"
 #include "user_cfg.h"
 #include "asm/charge.h"
+#include "TPH/Au_Adc.h"
 
 #define LOG_TAG_CONST       APP_POWER
 #define LOG_TAG             "[APP_POWER]"
@@ -101,8 +102,42 @@ int app_power_event_handler(struct device_event *dev, void (*set_soft_poweroff_c
 u16 get_vbat_level(void)
 {
     //return 370;     //debug
-    return (adc_get_voltage(AD_CH_VBAT) * 4 / 10);
+    // return (adc_get_voltage(AD_CH_VBAT) * 4 / 10);
+    return get_adc_level(AD_CH_VBAT);
 }
+
+/**
+  * @brief   平移滤波获取电压值
+  * @return  滤波后的电压等级
+  */
+// u16 get_vbat_level(void)
+// {
+//     // 指数平滑滤波参数: shift 为 N 则 alpha = 1/(2^N)
+//     // 范围: 2~6 (2: 快，6: 平滑)
+//     #ifndef VBAT_FILTER_SHIFT
+//     #define VBAT_FILTER_SHIFT    4      // 滤波平滑参数
+//     #endif
+
+//     #ifndef VBAT_SAMPLE_COUNT  
+//     #define VBAT_SAMPLE_COUNT    5      // 采样次数
+//     #endif
+
+//     // u32 raw = adc_get_voltage(AD_CH_VBAT);
+//     u32 raw = adc_filter_remove_extremes(AD_CH_VBAT, VBAT_SAMPLE_COUNT);
+// #if (VBAT_FILTER_SHIFT > 0)
+//     static u32 vbat_filt = 0;
+//     if (vbat_filt == 0) {
+//         // 初始化滤波器状态
+//         vbat_filt = raw << VBAT_FILTER_SHIFT;
+//     } else {
+//         // vbat_filt = vbat_filt*(1 - 1/2^N) + raw*(1/2^N)
+//         vbat_filt += raw - (vbat_filt >> VBAT_FILTER_SHIFT);
+//     }
+//     raw = (u32)(vbat_filt >> VBAT_FILTER_SHIFT);
+// #endif
+
+//     return (raw * 4 / 10);
+// }
 
 __attribute__((weak)) u8 remap_calculate_vbat_percent(u16 bat_val)
 {

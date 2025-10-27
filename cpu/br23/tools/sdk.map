@@ -1426,7 +1426,7 @@ END GROUP
 .psram
                 0x01e00120                . = ORIGIN (code0)
 
-.text           0x01e00120    0x32578
+.text           0x01e00120    0x325d8
                 0x01e00120                text_code_begin = .
                 [!provide]                PROVIDE (text_rodata_begin, .)
  *(.startup.text)
@@ -2411,76 +2411,77 @@ END GROUP
                 0x01e22cfc                . = ALIGN (0x4)
                 0x01e22cfc                . = ALIGN (0x4)
  *(.text*)
- .text          0x01e22cfc     0x9352 ../../../../cpu/br23/tools/sdk.elf.o
+ .text          0x01e22cfc     0x93ae ../../../../cpu/br23/tools/sdk.elf.o
                 0x01e24cc8                update_result_get
                 0x01e24d04                __errno
-                0x01e26cac                lib_btstack_version
-                0x01e26cb0                lib_media_version
-                0x01e272f4                app_load_common_code
-                0x01e27d14                exception_analyze
- .text          0x01e2c04e       0x14 C:/JL/pi32/pi32v2-lib/r3/libc.a(lib_a-strchr.o)
-                0x01e2c04e                strchr
- .text          0x01e2c062      0x314 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(adddf3.o)
-                0x01e2c0a2                __adddf3
- .text          0x01e2c376       0x4c C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(floatsidf.o)
-                0x01e2c376                __floatsidf
- .text          0x01e2c3c2      0x2fa C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(muldf3.o)
-                0x01e2c3f8                __muldf3
- .text          0x01e2c6bc        0x6 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(subdf3.o)
-                0x01e2c6bc                __subdf3
- .text          0x01e2c6c2       0x10 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(udivdi3.o)
-                0x01e2c6c2                __udivdi3
- .text          0x01e2c6d2      0x226 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(udivmoddi4.o)
-                0x01e2c6d2                __udivmoddi4
- .text          0x01e2c8f8       0x54 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(fixdfsi.o)
-                0x01e2c8f8                __fixdfsi
- .text          0x01e2c94c       0x3c C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(fixunsdfsi.o)
-                0x01e2c94c                __fixunsdfsi
- .text          0x01e2c988       0x34 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(floatunsidf.o)
-                0x01e2c988                __floatunsidf
+                0x01e26d08                lib_btstack_version
+                0x01e26d0c                lib_media_version
+                0x01e27350                app_load_common_code
+                0x01e27d70                exception_analyze
+ .text          0x01e2c0aa       0x14 C:/JL/pi32/pi32v2-lib/r3/libc.a(lib_a-strchr.o)
+                0x01e2c0aa                strchr
+ .text          0x01e2c0be      0x314 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(adddf3.o)
+                0x01e2c0fe                __adddf3
+ .text          0x01e2c3d2       0x4c C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(floatsidf.o)
+                0x01e2c3d2                __floatsidf
+ .text          0x01e2c41e      0x2fa C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(muldf3.o)
+                0x01e2c454                __muldf3
+ .text          0x01e2c718        0x6 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(subdf3.o)
+                0x01e2c718                __subdf3
+ .text          0x01e2c71e       0x10 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(udivdi3.o)
+                0x01e2c71e                __udivdi3
+ .text          0x01e2c72e      0x226 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(udivmoddi4.o)
+                0x01e2c72e                __udivmoddi4
+ .text          0x01e2c954       0x54 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(fixdfsi.o)
+                0x01e2c954                __fixdfsi
+ .text          0x01e2c9a8       0x3c C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(fixunsdfsi.o)
+                0x01e2c9a8                __fixunsdfsi
+ .text          0x01e2c9e4       0x34 C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a(floatunsidf.o)
+                0x01e2c9e4                __floatunsidf
  *(.LOG_TAG_CONST*)
  *(.rodata*)
  .rodata.str1.1
-                0x01e2c9bc      0x6f4 ../../../../cpu/br23/tools/sdk.elf.o
+                0x01e2ca18      0x6f4 ../../../../cpu/br23/tools/sdk.elf.o
                                 0x710 (size before relaxing)
- .rodata        0x01e2d0b0     0x36e0 ../../../../cpu/br23/tools/sdk.elf.o
+ *fill*         0x01e2d10c        0x4 
+ .rodata        0x01e2d110     0x36e0 ../../../../cpu/br23/tools/sdk.elf.o
  .rodata.str1.16
-                0x01e30790      0x370 ../../../../cpu/br23/tools/sdk.elf.o
+                0x01e307f0      0x370 ../../../../cpu/br23/tools/sdk.elf.o
                                 0x36a (size before relaxing)
- .rodata.cst32  0x01e30b00       0x60 ../../../../cpu/br23/tools/sdk.elf.o
-                0x01e30b60                . = ALIGN (0x4)
-                0x01e30b60                update_code_start = .
+ .rodata.cst32  0x01e30b60       0x60 ../../../../cpu/br23/tools/sdk.elf.o
+                0x01e30bc0                . = ALIGN (0x4)
+                0x01e30bc0                update_code_start = .
  *(.bt_updata_ram_code)
  .bt_updata_ram_code
-                0x01e30b60      0x178 ../../../../cpu/br23/tools/sdk.elf.o
+                0x01e30bc0      0x178 ../../../../cpu/br23/tools/sdk.elf.o
  *(.update_const)
- .update_const  0x01e30cd8      0x16e ../../../../cpu/br23/tools/sdk.elf.o
+ .update_const  0x01e30d38      0x16e ../../../../cpu/br23/tools/sdk.elf.o
  *(.update_code)
- .update_code   0x01e30e46     0x12ae ../../../../cpu/br23/tools/sdk.elf.o
-                0x01e320f4                update_code_end = .
-                0x01e320f4                . = ALIGN (0x4)
-                0x01e320f4                driver_code_start = .
-                0x01e320f4                . = ALIGN (0x4)
-                0x01e320f4                _SPI_CODE_START = .
+ .update_code   0x01e30ea6     0x12ae ../../../../cpu/br23/tools/sdk.elf.o
+                0x01e32154                update_code_end = .
+                0x01e32154                . = ALIGN (0x4)
+                0x01e32154                driver_code_start = .
+                0x01e32154                . = ALIGN (0x4)
+                0x01e32154                _SPI_CODE_START = .
  *(.spi_code)
-                0x01e320f4                . = ALIGN (0x4)
-                0x01e320f4                _SPI_CODE_END = .
-                0x01e320f4                clock_critical_handler_begin = .
+                0x01e32154                . = ALIGN (0x4)
+                0x01e32154                _SPI_CODE_END = .
+                0x01e32154                clock_critical_handler_begin = .
  *(.clock_critical_txt)
  .clock_critical_txt
-                0x01e320f4       0x18 ../../../../cpu/br23/tools/sdk.elf.o
-                0x01e320f4                clock_uart
-                0x01e320fc                clock_lrc
-                0x01e32104                clock_port
-                0x01e3210c                clock_critical_handler_end = .
-                0x01e3210c                chargestore_handler_begin = .
+                0x01e32154       0x18 ../../../../cpu/br23/tools/sdk.elf.o
+                0x01e32154                clock_uart
+                0x01e3215c                clock_lrc
+                0x01e32164                clock_port
+                0x01e3216c                clock_critical_handler_end = .
+                0x01e3216c                chargestore_handler_begin = .
  *(.chargestore_callback_txt)
-                0x01e3210c                chargestore_handler_end = .
-                0x01e3210c                CLOCK_CODE_START = .
+                0x01e3216c                chargestore_handler_end = .
+                0x01e3216c                CLOCK_CODE_START = .
  *(.clock_code)
- .clock_code    0x01e3210c      0x588 ../../../../cpu/br23/tools/sdk.elf.o
+ .clock_code    0x01e3216c      0x588 ../../../../cpu/br23/tools/sdk.elf.o
  *(.clock_const)
- .clock_const   0x01e32694        0x4 ../../../../cpu/br23/tools/sdk.elf.o
+ .clock_const   0x01e326f4        0x4 ../../../../cpu/br23/tools/sdk.elf.o
                 0x0000058c                CLOCK_CODE_SIZE = ABSOLUTE ((. - CLOCK_CODE_START))
  *(.debug_code)
  *(.debug_const)
@@ -2488,8 +2489,8 @@ END GROUP
  *(.power_const)
  *(.uart_code)
  *(.uart_const)
-                0x01e32698                driver_code_end = .
-                0x01e32698                . = ALIGN (0x4)
+                0x01e326f8                driver_code_end = .
+                0x01e326f8                . = ALIGN (0x4)
                 0x00000000                . = ORIGIN (ram0)
                 0x00000000                _data_code_begin = .
                 0x00000000                bank_code_run_addr = .
@@ -3354,8 +3355,8 @@ END GROUP
                 0x00000094                DRIVER_RAM_TOTAL = ((driver_data_end - driver_data_start) + (driver_bss_end - driver_bss_start))
                 0x000005a4                DRIVER_CODE_TOTAL = (driver_code_end - driver_code_start)
                 0x01e00120                text_begin = ADDR (.text)
-                0x00032578                text_size = SIZEOF (.text)
-                0x01e32698                text_end = (ADDR (.text) + SIZEOF (.text))
+                0x000325d8                text_size = SIZEOF (.text)
+                0x01e326f8                text_end = (ADDR (.text) + SIZEOF (.text))
                 0x00000001                ASSERT (((text_size % 0x4) == 0x0), !!! text_size Not Align 4 Bytes !!!)
                 0x00005520                bss_begin = ADDR (.bss)
                 0x000041c8                bss_size = SIZEOF (.bss)
@@ -3364,37 +3365,37 @@ END GROUP
                 0x00000000                bss1_size = SIZEOF (.bss1)
                 0x00000001                ASSERT (((bss1_size % 0x4) == 0x0), !!! bss1_size Not Align 4 Bytes !!!)
                 0x00000000                data_addr = ADDR (.data)
-                0x01e32698                data_begin = (text_begin + text_size)
+                0x01e326f8                data_begin = (text_begin + text_size)
                 0x00004ca4                data_size = SIZEOF (.data)
                 0x00000001                ASSERT (((data_size % 0x4) == 0x0), !!! data_size Not Align 4 Bytes !!!)
                 0x00800000                psram_vaddr = ADDR (.psram_text)
-                0x01e3733c                psram_laddr = ((text_begin + text_size) + data_size)
+                0x01e3739c                psram_laddr = ((text_begin + text_size) + data_size)
                 0x00000000                psram_text_size = SIZEOF (.psram_text)
                 0x00000001                ASSERT (((psram_text_size % 0x4) == 0x0), !!! psram_text_size Not Align 4 Bytes !!!)
-                0x01e3733c                bank_code_load_addr = (data_begin + data_size)
+                0x01e3739c                bank_code_load_addr = (data_begin + data_size)
                 0x00009724                aec_addr = ADDR (.overlay_aec)
-                0x01e3733c                aec_begin = ((text_begin + text_size) + data_size)
+                0x01e3739c                aec_begin = ((text_begin + text_size) + data_size)
                 0x00000004                aec_size = (o_aec_end - aec_addr)
                 0x00009724                wav_addr = ADDR (.overlay_wav)
-                0x01e37340                wav_begin = (aec_begin + aec_size)
+                0x01e373a0                wav_begin = (aec_begin + aec_size)
                 0x00000004                wav_size = SIZEOF (.overlay_wav)
                 0x00009724                ape_addr = ADDR (.overlay_ape)
-                0x01e37344                ape_begin = (wav_begin + wav_size)
+                0x01e373a4                ape_begin = (wav_begin + wav_size)
                 0x00000004                ape_size = SIZEOF (.overlay_ape)
                 0x00009724                flac_addr = ADDR (.overlay_flac)
-                0x01e37348                flac_begin = (ape_begin + ape_size)
+                0x01e373a8                flac_begin = (ape_begin + ape_size)
                 0x00000004                flac_size = SIZEOF (.overlay_flac)
                 0x00009724                m4a_addr = ADDR (.overlay_m4a)
-                0x01e3734c                m4a_begin = (flac_begin + flac_size)
+                0x01e373ac                m4a_begin = (flac_begin + flac_size)
                 0x00000004                m4a_size = SIZEOF (.overlay_m4a)
                 0x00009724                amr_addr = ADDR (.overlay_amr)
-                0x01e37350                amr_begin = (m4a_begin + m4a_size)
+                0x01e373b0                amr_begin = (m4a_begin + m4a_size)
                 0x00000004                amr_size = SIZEOF (.overlay_amr)
                 0x00009724                dts_addr = ADDR (.overlay_dts)
-                0x01e37354                dts_begin = (amr_begin + amr_size)
+                0x01e373b4                dts_begin = (amr_begin + amr_size)
                 0x00000004                dts_size = SIZEOF (.overlay_dts)
                 0x00009724                fm_addr = ADDR (.overlay_fm)
-                0x01e37358                fm_begin = (dts_begin + dts_size)
+                0x01e373b8                fm_begin = (dts_begin + dts_size)
                 0x00000004                fm_size = (o_fm_end - fm_addr)
                 0x00000001                ASSERT ((RAM_USED > bss_begin), RAM_USED < bss_begin)
                 0x00000001                ASSERT ((RAM_USED > data_addr), RAM_USED < data_addr)
@@ -3419,47 +3420,47 @@ LOAD C:/JL/pi32/pi32v2-lib/r3/libm.a
 LOAD C:/JL/pi32/pi32v2-lib/r3/libcompiler-rt.a
 OUTPUT(../../../../cpu/br23/tools/sdk.elf elf32-pi32v2)
 
-.debug_str      0x00000000    0x48e31
- .debug_str     0x00000000    0x48e31 ../../../../cpu/br23/tools/sdk.elf.o
-                              0x4d1ef (size before relaxing)
+.debug_str      0x00000000    0x48e77
+ .debug_str     0x00000000    0x48e77 ../../../../cpu/br23/tools/sdk.elf.o
+                              0x4d235 (size before relaxing)
 
-.debug_loc      0x00000000    0x2273c
- .debug_loc     0x00000000    0x2273c ../../../../cpu/br23/tools/sdk.elf.o
+.debug_loc      0x00000000    0x227e1
+ .debug_loc     0x00000000    0x227e1 ../../../../cpu/br23/tools/sdk.elf.o
 
 .debug_abbrev   0x00000000     0x1026
  .debug_abbrev  0x00000000     0x1000 ../../../../cpu/br23/tools/sdk.elf.o
  .debug_abbrev  0x00001000       0x26 ../../../../cpu/br23/liba/cpu.a(startup.S.o)
 
-.debug_info     0x00000000    0xb51e7
- .debug_info    0x00000000    0xb5048 ../../../../cpu/br23/tools/sdk.elf.o
- .debug_info    0x000b5048      0x19f ../../../../cpu/br23/liba/cpu.a(startup.S.o)
+.debug_info     0x00000000    0xb52e8
+ .debug_info    0x00000000    0xb5149 ../../../../cpu/br23/tools/sdk.elf.o
+ .debug_info    0x000b5149      0x19f ../../../../cpu/br23/liba/cpu.a(startup.S.o)
 
-.debug_ranges   0x00000000     0x4b98
- .debug_ranges  0x00000000     0x4b70 ../../../../cpu/br23/tools/sdk.elf.o
- .debug_ranges  0x00004b70       0x28 ../../../../cpu/br23/liba/cpu.a(startup.S.o)
+.debug_ranges   0x00000000     0x4bb0
+ .debug_ranges  0x00000000     0x4b88 ../../../../cpu/br23/tools/sdk.elf.o
+ .debug_ranges  0x00004b88       0x28 ../../../../cpu/br23/liba/cpu.a(startup.S.o)
 
 .debug_macinfo  0x00000000        0x1
  .debug_macinfo
                 0x00000000        0x1 ../../../../cpu/br23/tools/sdk.elf.o
 
 .debug_pubnames
-                0x00000000    0x20b05
+                0x00000000    0x20b32
  .debug_pubnames
-                0x00000000    0x20b05 ../../../../cpu/br23/tools/sdk.elf.o
+                0x00000000    0x20b32 ../../../../cpu/br23/tools/sdk.elf.o
 
 .debug_pubtypes
                 0x00000000    0x152b8
  .debug_pubtypes
                 0x00000000    0x152b8 ../../../../cpu/br23/tools/sdk.elf.o
 
-.debug_frame    0x00000000     0xb16c
- .debug_frame   0x00000000     0xb16c ../../../../cpu/br23/tools/sdk.elf.o
+.debug_frame    0x00000000     0xb174
+ .debug_frame   0x00000000     0xb174 ../../../../cpu/br23/tools/sdk.elf.o
 
-.debug_line     0x00000000    0x4cd98
- .debug_line    0x00000000    0x4cbfa ../../../../cpu/br23/tools/sdk.elf.o
- .debug_line    0x0004cbfa      0x146 ../../../../cpu/br23/liba/cpu.a(startup.S.o)
- .debug_line    0x0004cd40       0x2c ../../../../cpu/br23/liba/btctrler.a(version.z.o)
- .debug_line    0x0004cd6c       0x2c ../../../../cpu/br23/liba/update.a(version.z.o)
+.debug_line     0x00000000    0x4ce05
+ .debug_line    0x00000000    0x4cc67 ../../../../cpu/br23/tools/sdk.elf.o
+ .debug_line    0x0004cc67      0x146 ../../../../cpu/br23/liba/cpu.a(startup.S.o)
+ .debug_line    0x0004cdad       0x2c ../../../../cpu/br23/liba/btctrler.a(version.z.o)
+ .debug_line    0x0004cdd9       0x2c ../../../../cpu/br23/liba/update.a(version.z.o)
 
 .debug_aranges  0x00000000       0x28
  .debug_aranges

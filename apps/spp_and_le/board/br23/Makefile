@@ -212,6 +212,8 @@ INCLUDES := \
 	-I../../../../apps/spp_and_le/include/mytask/app_time \
 	-I../../../../apps/spp_and_le/include/mytask/app_event \
 	-I../../../../apps/spp_and_le/include/mytask/app_peripheral \
+	-I../../../../apps/spp_and_le/include/TPF\Au_Adc \
+	-I../../../../apps/spp_and_le/include/TPF\Au_Motor \
 	-I$(SYS_INC_DIR) \
 
 
@@ -458,6 +460,8 @@ c_SRC_FILES := \
 	../../../../apps/spp_and_le/mytask/app_time.c \
 	../../../../apps/spp_and_le/mytask/app_event.c \
 	../../../../apps/spp_and_le/mytask/app_peripheral.c \
+	../../../../apps/spp_and_le/TPF\Au_Adc.c \
+	../../../../apps/spp_and_le/TPF\Au_Motor.c \
 
 
 # 需要编译的 .S 文件

@@ -15,6 +15,10 @@
         "printf.h": "c",
         "stdarg.h": "c",
         "app_event.h": "c",
-        "event.h": "c"
+        "event.h": "c",
+        "app_power_manage.h": "c",
+        "au_adc.h": "c",
+        "update.h": "c",
+        "au_motor.h": "c"
     }
 }
