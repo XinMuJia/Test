@@ -35,7 +35,7 @@
 #define LOG_CLI_ENABLE
 #include "debug.h"
 
-extern u8 poweron_detected;
+extern volatile u8 poweron_detected;
 
 /* 任务配置   */
 #define IO_PORTR_00   0
@@ -84,7 +84,7 @@ const struct task_info task_info_table[] = {
 
  // 添加的自定义任务
 #if CONFIG_APP_MY_TASK
-    {"my_task",         5,     0,   512,   128  },
+    {"my_task",         4,     0,   256,   128  },
 #endif
 
 // 定义线程 检测开机按键

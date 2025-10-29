@@ -1,5 +1,5 @@
-objs/apps/spp_and_le/mytask/app_mytask.c.o: \
-  ../../../../apps/spp_and_le/mytask/app_mytask.c \
+objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o: \
+  ../../../../apps/spp_and_le/modules/TPF/Au_Printf.c \
   ../../../../include_lib\system/includes.h \
   ../../../../include_lib/system/init.h \
   ../../../../include_lib/system/event.h \
@@ -120,17 +120,8 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../apps/spp_and_le/include\app_action.h \
   ../../../../apps/spp_and_le/include\app_main.h \
   ../../../../include_lib/update\update.h \
-  ../../../../include_lib/update\update_loader_download.h \
-  ../../../../apps/spp_and_le/include\app_charge.h \
-  ../../../../apps/spp_and_le/include\app_power_manage.h \
-  ../../../../include_lib/driver/cpu/br23\asm/charge.h \
-  ../../../../include_lib/driver/cpu/br23\asm/power/p33.h \
-  ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
-  ../../../../apps/spp_and_le/include\mytask/app_time.h \
-  ../../../../apps/spp_and_le/include\rtc_alarm.h \
-  ../../../../apps/spp_and_le/include\mytask/app_event.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
   ../../../../include_lib/system\debug.h

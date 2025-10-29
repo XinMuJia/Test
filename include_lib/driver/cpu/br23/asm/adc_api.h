@@ -12,7 +12,7 @@
 #define AD_CH_PB3    (0x6)
 #define AD_CH_PB4    (0x7)
 #define AD_CH_PB8    (0x8)
-#define AD_CH_PB10   (0x9)  /* PB10 is used for ADC for TPH_ADC*/
+#define AD_CH_PB10   (0x9)  /* PB10 is used for ADC for TPH_ADC */
 #define AD_CH_PC4    (0xA)
 #define AD_CH_PC6    (0xB)
 #define AD_CH_DP     (0xC)

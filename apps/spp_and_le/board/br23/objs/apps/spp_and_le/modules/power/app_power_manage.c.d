@@ -124,4 +124,7 @@ objs/apps/spp_and_le/modules/power/app_power_manage.c.o: \
   ../../../../include_lib\btstack/avctp_user.h \
   ../../../../include_lib/btstack/btstack_typedef.h \
   ../../../../include_lib/system\user_cfg.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Adc.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
   ../../../../include_lib/system\debug.h

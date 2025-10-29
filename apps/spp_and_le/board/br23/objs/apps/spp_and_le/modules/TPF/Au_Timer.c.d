@@ -1,15 +1,13 @@
-objs/apps/spp_and_le/mytask/app_mytask.c.o: \
-  ../../../../apps/spp_and_le/mytask/app_mytask.c \
-  ../../../../include_lib\system/includes.h \
-  ../../../../include_lib/system/init.h \
-  ../../../../include_lib/system/event.h \
-  ../../../../include_lib/system/generic/typedef.h \
+objs/apps/spp_and_le/modules/TPF/Au_Timer.c.o: \
+  ../../../../apps/spp_and_le/modules/TPF/Au_Timer.c \
+  ../../../../include_lib/system/generic\typedef.h \
   ../../../../include_lib/driver/cpu/br23\asm/cpu.h \
   ../../../../include_lib/driver/cpu/br23\asm/br23.h \
   ../../../../include_lib/driver/cpu/br23\asm/csfr.h \
   ../../../../include_lib/driver/cpu/br23\asm/irq.h \
   ../../../../include_lib/driver/cpu/br23\asm/hwi.h \
   ../../../../include_lib/system\generic/printf.h \
+  ../../../../include_lib/system/generic/typedef.h \
   ../../../../include_lib\system/generic/log.h \
   ../../../../include_lib/system\generic/errno-base.h \
   C:/JL/pi32/pi32v2-include\string.h C:/JL/pi32/pi32v2-include/_ansi.h \
@@ -29,6 +27,11 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   C:/JL/pi32/pi32v2-include\sys/_stdint.h \
   C:/JL/pi32/pi32v2-include\machine/types.h \
   ../../../../include_lib\system/malloc.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
+  ../../../../include_lib\system/includes.h \
+  ../../../../include_lib/system/init.h \
+  ../../../../include_lib/system/event.h \
   ../../../../include_lib/system/generic/list.h \
   ../../../../include_lib/system/generic/rect.h \
   ../../../../include_lib/system/spinlock.h \
@@ -119,18 +122,4 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../apps/spp_and_le/include/user_cfg_id.h \
   ../../../../apps/spp_and_le/include\app_action.h \
   ../../../../apps/spp_and_le/include\app_main.h \
-  ../../../../include_lib/update\update.h \
-  ../../../../include_lib/update\update_loader_download.h \
-  ../../../../apps/spp_and_le/include\app_charge.h \
-  ../../../../apps/spp_and_le/include\app_power_manage.h \
-  ../../../../include_lib/driver/cpu/br23\asm/charge.h \
-  ../../../../include_lib/driver/cpu/br23\asm/power/p33.h \
-  ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
-  ../../../../apps/spp_and_le/include\mytask/app_time.h \
-  ../../../../apps/spp_and_le/include\rtc_alarm.h \
-  ../../../../apps/spp_and_le/include\mytask/app_event.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
-  ../../../../include_lib/system\debug.h
+  ../../../../include_lib/update\update.h

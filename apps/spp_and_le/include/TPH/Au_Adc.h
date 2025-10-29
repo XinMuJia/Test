@@ -1,6 +1,7 @@
-#ifndef     __AU_ADC_H__
-#define     __AU_ADC_H__
+#ifndef    __AU_ADC_H__
+#define    __AU_ADC_H__
 #include "typedef.h"
+#include "TPH/Au_Config.h"
 
 // ADC通道定义
 #define AD_CH_TEMP             AD_CH_PB10 // 热敏电阻接在PB10通道

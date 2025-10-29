@@ -19,6 +19,10 @@
         "app_power_manage.h": "c",
         "au_adc.h": "c",
         "update.h": "c",
-        "au_motor.h": "c"
+        "au_motor.h": "c",
+        "app_main.h": "c",
+        "typedef.h": "c",
+        "au_config.h": "c",
+        "au_timer.h": "c"
     }
 }

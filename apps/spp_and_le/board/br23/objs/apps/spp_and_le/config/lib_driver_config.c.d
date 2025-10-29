@@ -1,5 +1,15 @@
-objs/apps/spp_and_le/mytask/app_mytask.c.o: \
-  ../../../../apps/spp_and_le/mytask/app_mytask.c \
+objs/apps/spp_and_le/config/lib_driver_config.c.o: \
+  ../../../../apps/spp_and_le/config/lib_driver_config.c \
+  ../../../../apps/spp_and_le/include\app_config.h \
+  ../../../../apps/spp_and_le/board/br23\board_config.h \
+  ../../../../apps/spp_and_le/board/br23/board_ac635n_demo_cfg.h \
+  ../../../../apps/spp_and_le/board/br23/board_ac635n_demo_global_build_cfg.h \
+  ../../../../apps/common/device/usb\usb_std_class_def.h \
+  ../../../../apps/spp_and_le/board/br23/board_ac635n_fmy_cfg.h \
+  ../../../../apps/spp_and_le/board/br23/board_ac635n_fmy_global_build_cfg.h \
+  ../../../../apps/common/device/usb\usb_common_def.h \
+  ../../../../include_lib/btctrler\btcontroller_mode.h \
+  ../../../../apps/spp_and_le/include/user_cfg_id.h \
   ../../../../include_lib\system/includes.h \
   ../../../../include_lib/system/init.h \
   ../../../../include_lib/system/event.h \
@@ -106,31 +116,4 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../include_lib/driver/cpu/br23\asm/timer.h \
   ../../../../include_lib/driver/cpu/br23\asm/rtc.h \
   ../../../../include_lib/driver/cpu/br23\asm/mcpwm.h \
-  ../../../../include_lib/driver\device/sdio_host_init.h \
-  ../../../../apps/spp_and_le/include\app_config.h \
-  ../../../../apps/spp_and_le/board/br23\board_config.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_demo_cfg.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_demo_global_build_cfg.h \
-  ../../../../apps/common/device/usb\usb_std_class_def.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_fmy_cfg.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_fmy_global_build_cfg.h \
-  ../../../../apps/common/device/usb\usb_common_def.h \
-  ../../../../include_lib/btctrler\btcontroller_mode.h \
-  ../../../../apps/spp_and_le/include/user_cfg_id.h \
-  ../../../../apps/spp_and_le/include\app_action.h \
-  ../../../../apps/spp_and_le/include\app_main.h \
-  ../../../../include_lib/update\update.h \
-  ../../../../include_lib/update\update_loader_download.h \
-  ../../../../apps/spp_and_le/include\app_charge.h \
-  ../../../../apps/spp_and_le/include\app_power_manage.h \
-  ../../../../include_lib/driver/cpu/br23\asm/charge.h \
-  ../../../../include_lib/driver/cpu/br23\asm/power/p33.h \
-  ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
-  ../../../../apps/spp_and_le/include\mytask/app_time.h \
-  ../../../../apps/spp_and_le/include\rtc_alarm.h \
-  ../../../../apps/spp_and_le/include\mytask/app_event.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
-  ../../../../include_lib/system\debug.h
+  ../../../../include_lib/driver\device/sdio_host_init.h

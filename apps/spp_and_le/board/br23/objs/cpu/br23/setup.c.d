@@ -1,16 +1,12 @@
-objs/apps/spp_and_le/mytask/app_mytask.c.o: \
-  ../../../../apps/spp_and_le/mytask/app_mytask.c \
-  ../../../../include_lib\system/includes.h \
-  ../../../../include_lib/system/init.h \
-  ../../../../include_lib/system/event.h \
-  ../../../../include_lib/system/generic/typedef.h \
+objs/cpu/br23/setup.c.o: ../../../../cpu/br23/setup.c \
+  ../../../../include_lib/driver/cpu/br23\asm/includes.h \
   ../../../../include_lib/driver/cpu/br23\asm/cpu.h \
   ../../../../include_lib/driver/cpu/br23\asm/br23.h \
   ../../../../include_lib/driver/cpu/br23\asm/csfr.h \
   ../../../../include_lib/driver/cpu/br23\asm/irq.h \
   ../../../../include_lib/driver/cpu/br23\asm/hwi.h \
   ../../../../include_lib/system\generic/printf.h \
-  ../../../../include_lib\system/generic/log.h \
+  ../../../../include_lib/system/generic/typedef.h \
   ../../../../include_lib/system\generic/errno-base.h \
   C:/JL/pi32/pi32v2-include\string.h C:/JL/pi32/pi32v2-include/_ansi.h \
   C:/JL/pi32/pi32v2-include\newlib.h \
@@ -29,12 +25,21 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   C:/JL/pi32/pi32v2-include\sys/_stdint.h \
   C:/JL/pi32/pi32v2-include\machine/types.h \
   ../../../../include_lib\system/malloc.h \
-  ../../../../include_lib/system/generic/list.h \
-  ../../../../include_lib/system/generic/rect.h \
-  ../../../../include_lib/system/spinlock.h \
-  ../../../../include_lib/system/generic\cpu.h \
-  ../../../../include_lib/system/generic\irq.h \
-  ../../../../include_lib/system/task.h \
+  ../../../../include_lib\system/generic/log.h \
+  ../../../../include_lib/driver/cpu/br23\asm/crc16.h \
+  ../../../../include_lib/driver/cpu/br23\asm/clock.h \
+  ../../../../include_lib/driver/cpu/br23\asm/clock_hw.h \
+  ../../../../include_lib/driver/cpu/br23\asm/clock_define.h \
+  ../../../../include_lib/driver/cpu/br23\asm/uart.h \
+  ../../../../include_lib/driver\device/uart.h \
+  ../../../../include_lib/system\device/device.h \
+  ../../../../include_lib/system\generic/list.h \
+  ../../../../include_lib/system\generic/atomic.h \
+  ../../../../include_lib/system/generic/cpu.h \
+  ../../../../include_lib/system/generic/irq.h \
+  ../../../../include_lib/system\device/ioctl_cmds.h \
+  ../../../../include_lib/system\generic/ioctl.h \
+  ../../../../include_lib\system/task.h \
   ../../../../include_lib/system/os/os_api.h \
   ../../../../include_lib/system\os/os_cpu.h \
   ../../../../include_lib/system/generic\jiffies.h \
@@ -53,14 +58,29 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../include_lib/system/os/FreeRTOS/queue.h \
   ../../../../include_lib/system/os/FreeRTOS/task.h \
   ../../../../include_lib/system/os/FreeRTOS/list.h \
-  ../../../../include_lib/system/timer.h \
+  ../../../../include_lib/driver/cpu/br23\asm/uart_dev.h \
+  ../../../../include_lib/driver/cpu/br23\asm/gpio.h \
+  ../../../../include_lib/driver/cpu/br23\asm/spiflash.h \
+  ../../../../include_lib/driver\device/spiflash.h \
+  ../../../../include_lib/driver/cpu/br23\asm/power_interface.h \
+  ../../../../include_lib/driver/cpu/br23\asm/efuse.h \
+  ../../../../include_lib/driver/cpu/br23\asm/wdt.h \
+  ../../../../include_lib/driver/cpu/br23\asm/timer.h \
+  ../../../../include_lib/driver/cpu/br23\asm/rtc.h \
+  ../../../../include_lib/driver/cpu/br23\asm/mcpwm.h \
+  ../../../../include_lib/driver/cpu/br23\asm/debug.h \
+  ../../../../include_lib/driver/cpu/br23\asm/power/p33.h \
+  ../../../../include_lib/system\timer.h \
+  ../../../../include_lib\system/init.h \
+  ../../../../include_lib\system/includes.h \
+  ../../../../include_lib/system/event.h \
+  ../../../../include_lib/system/generic/rect.h \
+  ../../../../include_lib/system/spinlock.h \
   ../../../../include_lib/system/wait.h \
   ../../../../include_lib/system/app_core.h \
   ../../../../include_lib/system/app_msg.h \
   ../../../../include_lib/system/database.h \
   ../../../../include_lib/system/fs/fs.h \
-  ../../../../include_lib/system\generic/ioctl.h \
-  ../../../../include_lib/system\generic/atomic.h \
   ../../../../include_lib\system/sys_time.h \
   ../../../../include_lib/system/fs/fs_file_name.h \
   ../../../../include_lib/system/fs/sdfile.h \
@@ -70,7 +90,6 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../include_lib/system/generic/includes.h \
   ../../../../include_lib/system/generic/ascii.h \
   ../../../../include_lib/system/generic/gpio.h \
-  ../../../../include_lib/driver/cpu/br23\asm/gpio.h \
   ../../../../include_lib/system/generic/version.h \
   ../../../../include_lib/system/generic/lbuf.h \
   ../../../../include_lib/system/generic/lbuf_lite.h \
@@ -78,8 +97,6 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../include_lib/system/generic/index.h \
   ../../../../include_lib/system/generic/debug_lite.h \
   ../../../../include_lib/system/device/includes.h \
-  ../../../../include_lib/system/device/device.h \
-  ../../../../include_lib/system\device/ioctl_cmds.h \
   ../../../../include_lib/system/device/key_driver.h \
   ../../../../include_lib/system/device/iokey.h \
   ../../../../include_lib/system/device/irkey.h \
@@ -90,22 +107,6 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../include_lib/driver/cpu/br23\asm/plcnt.h \
   ../../../../include_lib/system/device/rdec_key.h \
   ../../../../include_lib/driver/cpu/br23\asm/rdec.h \
-  ../../../../include_lib/driver/cpu/br23\asm/includes.h \
-  ../../../../include_lib/driver/cpu/br23\asm/crc16.h \
-  ../../../../include_lib/driver/cpu/br23\asm/clock.h \
-  ../../../../include_lib/driver/cpu/br23\asm/clock_hw.h \
-  ../../../../include_lib/driver/cpu/br23\asm/clock_define.h \
-  ../../../../include_lib/driver/cpu/br23\asm/uart.h \
-  ../../../../include_lib/driver\device/uart.h \
-  ../../../../include_lib/driver/cpu/br23\asm/uart_dev.h \
-  ../../../../include_lib/driver/cpu/br23\asm/spiflash.h \
-  ../../../../include_lib/driver\device/spiflash.h \
-  ../../../../include_lib/driver/cpu/br23\asm/power_interface.h \
-  ../../../../include_lib/driver/cpu/br23\asm/efuse.h \
-  ../../../../include_lib/driver/cpu/br23\asm/wdt.h \
-  ../../../../include_lib/driver/cpu/br23\asm/timer.h \
-  ../../../../include_lib/driver/cpu/br23\asm/rtc.h \
-  ../../../../include_lib/driver/cpu/br23\asm/mcpwm.h \
   ../../../../include_lib/driver\device/sdio_host_init.h \
   ../../../../apps/spp_and_le/include\app_config.h \
   ../../../../apps/spp_and_le/board/br23\board_config.h \
@@ -117,20 +118,4 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o: \
   ../../../../apps/common/device/usb\usb_common_def.h \
   ../../../../include_lib/btctrler\btcontroller_mode.h \
   ../../../../apps/spp_and_le/include/user_cfg_id.h \
-  ../../../../apps/spp_and_le/include\app_action.h \
-  ../../../../apps/spp_and_le/include\app_main.h \
-  ../../../../include_lib/update\update.h \
-  ../../../../include_lib/update\update_loader_download.h \
-  ../../../../apps/spp_and_le/include\app_charge.h \
-  ../../../../apps/spp_and_le/include\app_power_manage.h \
-  ../../../../include_lib/driver/cpu/br23\asm/charge.h \
-  ../../../../include_lib/driver/cpu/br23\asm/power/p33.h \
-  ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
-  ../../../../apps/spp_and_le/include\mytask/app_time.h \
-  ../../../../apps/spp_and_le/include\rtc_alarm.h \
-  ../../../../apps/spp_and_le/include\mytask/app_event.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
   ../../../../include_lib/system\debug.h

@@ -13,6 +13,8 @@
 #include "rtc_alarm.h"
 #include "iokey.h"
 #include "mytask/app_event.h"
+#include "TPH/Au_Motor.h"
+#include "TPH/Au_Printf.h"
 
 
 // 添加日志系统定义
@@ -27,9 +29,10 @@
 
 extern const struct task_info task_info_table[];
 // 对应的任务函数实现
-u8 poweron_detected = 0;
+volatile u8 poweron_detected = 0;
 
 extern u8 lcd_init_complete;
+extern bool Printer_Timeout;
 
 
 /* 任务配置   */
@@ -41,10 +44,23 @@ extern u8 lcd_init_complete;
 void rtc_32k_clock_test();
 void start_rtc_clock_test();
 
-/* 消息队列 */
+/* 打印 */
 void my_task(void *p)
 {
+    /* 等待开机完成再初始化 LCD */
+    while (!poweron_detected) {
+        os_time_dly(10);
+    }
+
+    Init_Printer();
+    TestSTB();
     while(1) {
+        if (Get_State_Timeout()) {
+            // 在任务上下文打印或处理超时逻辑（safe）
+            log_info("Printer timeout handled in task");
+        }
+
+        log_info("Printer timeout handled in task");
         printf("my_task\n");
         os_time_dly(100);
     }

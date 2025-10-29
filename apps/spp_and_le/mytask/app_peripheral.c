@@ -29,6 +29,7 @@ void Pump_Init(void)
     // 设置PR1为数字IO模式
     p33_tx_1byte(R3_OSL_CON, 0);
     rtc_port_pr_die(IO_PORTR_00, 1);
+    rtc_port_pr_die(IO_PORTR_01, 1);
 }
 
 void Peripheral_Init(void)

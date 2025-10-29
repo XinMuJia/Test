@@ -22,7 +22,7 @@
 
 // 添加任务定义
 #define APP_TASK_NAME "app_task"
-extern u8 poweron_detected;
+extern volatile u8 poweron_detected;
 extern u8 lcd_init_complete;
 
 /* 气泵配置   */
@@ -56,14 +56,17 @@ void handle_long_press(u8 key_value)
             set_key_poweron_flag(1); 
 
             // 开机
-            gpio_direction_output(IO_PORTB_11, 1);     
-            gpio_write(IO_PORTB_11, 1);
+            // gpio_direction_output(IO_PORTB_11, 1);     
+            // gpio_write(IO_PORTB_11, 1);
+            rtc_port_pr_out(IO_PORTR_01, OUT_HIGH);
+
             log_info("is poweron");
             poweron_detected = 1;
         } else { // 关机
             log_info("-");
             set_key_poweron_flag(0); 
-            gpio_write(IO_PORTB_11, 0);
+            // gpio_write(IO_PORTB_11, 0);
+            rtc_port_pr_out(IO_PORTR_01, OUT_LOW);
             poweron_detected = 0;
         }
         #endif
@@ -104,10 +107,6 @@ void pump_time_update()
 
 void handle_single_click(u8 key_value)
 {
-    // while(!poweron_detected || !lcd_init_complete) {
-    //     os_time_dly(10); // 等待开机按键检测完成
-    // }
-
     switch (key_value)
     {
         case 5:
