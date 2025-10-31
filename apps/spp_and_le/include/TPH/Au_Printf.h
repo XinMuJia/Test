@@ -10,6 +10,7 @@
 #define TPH_DI_LEN 20
 //所有通道打印
 #define ALL_STB_NUM 0xff
+#define TPH_STB_NUM 0x01
 
 //TPH数据时钟,DI,CLK
 #define	GPIO_Port_TPH_DI			IO_PORTC_05
@@ -19,12 +20,15 @@
 #define	GPIO_Port_TPH_LAT			IO_PORTC_07
 
 #define GPIO_Port_TPH_VH		    IO_PORTA_00
+#define VH_EN(i) gpio_direction_output(GPIO_Port_TPH_VH, i)
 
 #define STB1_Pin IO_PORTD_00
 #define STB2_Pin IO_PORTD_01
 #define STB3_Pin IO_PORTD_02
 #define STB4_Pin IO_PORTD_03
 #define STB5_Pin IO_PORTD_04
+
+#define ADC_Channel_Paper_Check   IO_PORTB_11 // 进纸检测接在PB11通道
 
 // 函数声明
 void Set_Heat_Density(uint8_t Density);

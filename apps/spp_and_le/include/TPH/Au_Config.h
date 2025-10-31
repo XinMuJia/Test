@@ -18,8 +18,16 @@
 #define LOW               0x0
 #define HIGH              0x1
 
+typedef enum
+{ Bit_RESET = 0,
+  Bit_SET
+}BitAction;
+
 //接收完成所有数据才开始打印
 #define START_PRINTER_WHEN_FINISH_RAED 1
+// 电机和打印头使能标志
+static uint8_t MOTO_EN = 0;
+static uint8_t TPH_EN = 0;
 
 //按键引脚
 //34 35 36 39仅可以作为输入INPUT,不支持INPUT_PULLUP

@@ -4,6 +4,8 @@
 #include "app_main.h"
 #include "update.h"
 #include "TPH/Au_Motor.h"
+#include "TPH/Au_Printf.h"
+#include "TPH/Au_Timer.h"
 
 
 uint8_t Motor_Pos = 0;
@@ -18,6 +20,20 @@ uint8_t Motor_Table[8][4] = {
     {1, 1, 0, 0},
     {1, 0, 0, 0}
 };
+
+// [AM][AP][BM][BP]
+// uint8_t Motor_Table[8][4] = {
+//     {1, 1, 0, 0},  // 0x05 -> AM=1, AP=1, BM=0, BP=0
+//     {1, 0, 0, 0},  // 0x01 -> AM=1, AP=0, BM=0, BP=0
+//     {1, 0, 0, 1},  // 0x09 -> AM=1, AP=0, BM=0, BP=1
+//     {0, 0, 0, 1},  // 0x08 -> AM=0, AP=0, BM=0, BP=1
+//     {0, 1, 0, 1},  // 0x0a -> AM=0, AP=1, BM=0, BP=1
+//     {0, 1, 0, 0},  // 0x02 -> AM=0, AP=1, BM=0, BP=0
+//     {0, 1, 1, 0},  // 0x06 -> AM=0, AP=1, BM=1, BP=0
+//     {0, 0, 1, 0}   // 0x04 -> AM=0, AP=0, BM=1, BP=0
+// };
+
+
 
 // 定义全局变量：定时器句柄
 static u16 motor_timer_id = 0;
@@ -53,21 +69,18 @@ static void Motor_Write(int pin, int PinState)
 // 定时器回调函数
 static void motor_timer_callback(void *arg)
 {
-    PRINT_DEBUG("Motor's timerHandler is running!");
+    if(!MOTO_EN)return;
+
     Motor_Write(PIN_MOTOR_AM, Motor_Table[Motor_Pos][0]);
     Motor_Write(PIN_MOTOR_BM, Motor_Table[Motor_Pos][1]);
     Motor_Write(PIN_MOTOR_AP, Motor_Table[Motor_Pos][2]);
     Motor_Write(PIN_MOTOR_BP, Motor_Table[Motor_Pos][3]);
     
-    
-    Motor_Pos++;
-    if (Motor_Pos >= 8) {
-        Motor_Pos = 0;
-    }
+    Motor_Pos = (Motor_Pos + 1) & 0x07;
 }
 
 /*
- * @brief  电机开始工作
+ * @brief  电机开始工作（自动控制）
  * @param  none
  * @return none	
  * @note   使用 sys_timer_add 创建周期性定时器，每 2ms 触发一次
@@ -104,7 +117,7 @@ void Motor_SmoothSetSpeed(u32 target_period_ms, u32 step_delay_ms)
 {
     // 如果没有运行则直接设置并启动
     if (!motor_timer_id) {
-        Motor_StartEx(target_period_ms);
+        Motor_SetSpeed(target_period_ms);
         return;
     }
 
@@ -167,10 +180,8 @@ void Motor_Run()
     
     //Debug_Print();
     
-    Motor_Pos++;
-    if (Motor_Pos >= 8) {
-        Motor_Pos = 0;
-    }
+
+    Motor_Pos = (Motor_Pos + 1) & 0x07;
 }
 
 /*
@@ -181,22 +192,18 @@ void Motor_Run()
  */
 void Motor_Run_Steps(uint32_t steps)
 {
-    PRINT_DEBUG("Motor run steps!");
+    PRINT_DEBUG("Motor run steps:%d!", steps);
     while (steps--) {
         Motor_Write(PIN_MOTOR_AM, Motor_Table[Motor_Pos][0]);
         Motor_Write(PIN_MOTOR_BM, Motor_Table[Motor_Pos][1]);
         Motor_Write(PIN_MOTOR_AP, Motor_Table[Motor_Pos][2]);
         Motor_Write(PIN_MOTOR_BP, Motor_Table[Motor_Pos][3]); 
-        
         //Debug_Print();
         
-        Motor_Pos++;
-        if (Motor_Pos >= 8) {
-            Motor_Pos = 0;
-        }
+        Motor_Pos = (Motor_Pos + 1) & 0x07;
         
         /* 等待一步 */
-        us_delay(MOTOR_WAIT_TIME);
+        us_delay(MOTOR_WAIT_TIME / 2);
     }
 }
 
@@ -215,4 +222,13 @@ void Init_Motor(void)
     Motor_Write(PIN_MOTOR_AP, RESET);
     Motor_Write(PIN_MOTOR_BP, RESET); 
 }
-
+u8 step_sequence[8] = {0x05,0x01,0x09,0x08,0x0a,0x02,0x06,0x04}; 
+void Motor_Test(void)
+{
+    // MOTOR_STEP(0x00);
+    PRINT_DEBUG("step_test!");
+    for(int i = 0; i < 100; i++) {
+        MOTOR_STEP(step_sequence[i % 8]);
+        os_time_dly(5);
+    } 
+}

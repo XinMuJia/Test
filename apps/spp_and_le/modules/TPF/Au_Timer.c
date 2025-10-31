@@ -4,10 +4,11 @@
 #include "app_action.h"
 #include "app_main.h"
 #include "update.h"
+#include "TPH/Au_Timer.h"
+#include "TPH/Au_Printf.h"
 
 bool State_Timeout = false;
 bool Printer_Timeout = false;
-
 
 struct Au_ID au_id;
 
@@ -20,21 +21,25 @@ void us_delay_us(unsigned int us)
         return;
     }
 
-    /* 如果大于等于 1000us，先用系统睡眠 ms 部分以节省 CPU */
+    /* 对于较短延时也考虑使用系统调度 */
     if (us >= 1000) {
         unsigned int ms = us / 1000;
-        /* 注意：os_time_dly 接受 tick，不同平台 tick 长度不同。
-           若有 ms 精度的睡眠函数，请用那个函数替换下面一行。 */
-        os_time_dly(ms); // 按需替换为 ms 睡眠 API
+        os_time_dly(ms);
         us = us % 1000;
     }
 
-    /* 忙等待剩余的微秒（近似） */
+    /* 对于较短的微秒级延时使用忙等待 */
     if (us) {
-        volatile unsigned int i;
-        unsigned int loops = us * US_DELAY_LOOP_FACTOR;
-        for (i = 0; i < loops; i++) {
-            (void)i;
+        /* 如果延时较长(例如>100us)，可考虑让出CPU */
+        if (us > 100) {
+            os_time_dly(1); // 让出一个tick的时间片
+        } else {
+            /* 短延时才使用忙等待 */
+            volatile unsigned int i;
+            unsigned int loops = us * US_DELAY_LOOP_FACTOR;
+            for (i = 0; i < loops; i++) {
+                (void)i;
+            }
         }
     }
 }
@@ -128,4 +133,59 @@ void Close_Printer_Timeout_Timer(void)
 bool Get_Printer_Timeout_Status(void)
 {
     return Printer_Timeout;
+}
+
+/*
+ * @brief  进纸检测定时器回调函数
+ * @param  arg 回调参数
+ * @return none
+ * @note   定期检测进纸状态
+ */
+void Paper_Check_Timer_Callback(void const *arg)
+{
+    // 进纸判断*******************
+    if (gpio_read(ADC_Channel_Paper_Check) < PAPER_THRESHOLD)  // ADC默认值 判断进纸
+    {
+        PAPER_ON++;
+        PAPER_OFF = 0;
+    }
+    else
+    {
+        PAPER_ON = 0;
+        PAPER_OFF++;
+    }
+    
+    PAPER_ON > PAPER_COUNT_THRESHOLD ? (PAPER_Key = 1) : (PAPER_Key);
+    PAPER_OFF > PAPER_COUNT_THRESHOLD ? (PAPER_Key = 0) : (PAPER_Key);
+    
+    // 如果没有纸张，禁用电机和打印头
+    if (PAPER_Key != 1) {
+        // 禁用电机和打印头
+        MOTO_EN = DISABLE;
+        TPH_EN = DISABLE;
+    } else {
+        // 打印头和电机正常
+        MOTO_EN = ENABLE;
+        TPH_EN = ENABLE;
+    }
+}
+
+/* @brief  初始化进纸检测定时器 */
+void Init_Paper_Check_Timer(void)
+{
+    au_id.paper_check_timer_id = sys_timer_add(NULL, Paper_Check_Timer_Callback, 1000); // 1s
+}
+
+/*
+ * @brief  停止进纸检测定时器
+ * @param  none
+ * @return none
+ * @note   停止进纸检测定时器
+ */
+void Stop_Paper_Check_Timer(void)
+{
+    if (au_id.paper_check_timer_id != 0) {
+        sys_timer_del(au_id.paper_check_timer_id);
+        au_id.paper_check_timer_id = 0;
+    }
 }

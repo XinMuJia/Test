@@ -122,4 +122,5 @@ objs/apps/spp_and_le/modules/TPF/Au_Motor.c.o: \
   ../../../../include_lib/update\update.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h
+  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h

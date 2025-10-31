@@ -14,8 +14,16 @@ struct Au_ID
 {
     u16 state_timer_id;
     u16 printer_timer_id;
+    u16 paper_check_timer_id;
 };
 
+// 进纸检测相关变量
+static uint16_t PAPER_ON = 0;
+static uint16_t PAPER_OFF = 0;
+static uint8_t PAPER_Key = 0;
+
+#define PAPER_THRESHOLD 550
+#define PAPER_COUNT_THRESHOLD 100
 
 extern struct Au_ID au_id;
 
@@ -29,5 +37,7 @@ void Open_Printer_Timeout_Timer(void);
 void Close_Printer_Timeout_Timer(void);
 bool Get_Printer_Timeout_Status(void);
 void us_delay_us(unsigned int us);
+// 进纸检测定时器
+void Init_Paper_Check_Timer(void);
 
 #endif // AU_TIMER_H

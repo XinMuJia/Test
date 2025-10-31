@@ -239,7 +239,7 @@ static void Run_STB(uint8_t Now_STB_num)
  */
 bool Move_And_Start_STB(bool need_stop, uint8_t STBnum)
 {
-    if (need_stop == true) {
+    if (need_stop == true || TPH_EN == DISABLE) {
         PRINT_DEBUG("stop printing!");
         Motor_Stop();
         Stop_Printing();
@@ -328,7 +328,6 @@ void Start_Printing_By_OneSTB(uint8_t STBnum, uint8_t* Data, uint32_t Len)
     uint8_t* ptr = Data;
     bool need_stop = false;
     Init_Printing();
-    
     while (1) {
         PRINT_DEBUG("printer %d", offset);
         if (Len > offset) {
@@ -348,8 +347,12 @@ void Start_Printing_By_OneSTB(uint8_t STBnum, uint8_t* Data, uint32_t Len)
             break;
         }
     }
+    // Motor_Start();
+    // Motor_SmoothSetSpeed(2, 5);
     Motor_Run_Steps(40);
+    // Motor_Start();
     Motor_Stop();
+    // VH_EN(0);
 }
 
 /*

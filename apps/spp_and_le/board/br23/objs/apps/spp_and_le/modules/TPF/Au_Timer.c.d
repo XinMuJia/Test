@@ -122,4 +122,5 @@ objs/apps/spp_and_le/modules/TPF/Au_Timer.c.o: \
   ../../../../apps/spp_and_le/include/user_cfg_id.h \
   ../../../../apps/spp_and_le/include\app_action.h \
   ../../../../apps/spp_and_le/include\app_main.h \
-  ../../../../include_lib/update\update.h
+  ../../../../include_lib/update\update.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h

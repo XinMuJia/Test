@@ -52,8 +52,12 @@ void my_task(void *p)
         os_time_dly(10);
     }
 
+    // Init_Printer();
+    
     Init_Printer();
+    VH_EN(1);
     TestSTB();
+    VH_EN(0);
     while(1) {
         if (Get_State_Timeout()) {
             // 在任务上下文打印或处理超时逻辑（safe）
