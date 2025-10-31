@@ -52,12 +52,8 @@ void my_task(void *p)
         os_time_dly(10);
     }
 
-    // Init_Printer();
-    
     Init_Printer();
-    VH_EN(1);
     TestSTB();
-    VH_EN(0);
     while(1) {
         if (Get_State_Timeout()) {
             // 在任务上下文打印或处理超时逻辑（safe）
@@ -76,11 +72,12 @@ void show_battery_level(void)
     static u8 last_percentage = 0xFF;
     u8 percentage_num = 3;
     u8 percentage = get_vbat_percent();
-    
+    printf("vbat==%d\n", percentage);
     if(percentage > 100) percentage = 100;
     
     // 只在电量变化时更新
     if(percentage != last_percentage) {
+        LCD_Show_String(1, 5, "    "); // 清理4个字符位置
         char num_str[4];
         
         // 格式化数字
@@ -93,11 +90,14 @@ void show_battery_level(void)
         
         // 只更新数字部分
         for(int i = 0; i < percentage_num; i++) {
-            if(num_str[i] != '\0') {
-                LCD_Show_Num(1, 4 + (3 - percentage_num + i), num_str[i]);
-            }
+        if(num_str[i] != '\0') {
+            // 从右到左显示，固定右侧对齐
+            LCD_Show_Char(1, 6 - (percentage_num - 1 - i), num_str[i]);
         }
-        LCD_Show_Char(1, 4 + percentage_num + 1, '%'); // 显示百分号
+    }
+        LCD_Show_Char(1, 7, '%'); // 百分号固定在最右侧
+
+        last_percentage = percentage;
     }
 #endif
 }

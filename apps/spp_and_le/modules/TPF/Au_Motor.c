@@ -69,7 +69,7 @@ static void Motor_Write(int pin, int PinState)
 // 定时器回调函数
 static void motor_timer_callback(void *arg)
 {
-    if(!MOTO_EN)return;
+    // if(!MOTO_EN)return;
 
     Motor_Write(PIN_MOTOR_AM, Motor_Table[Motor_Pos][0]);
     Motor_Write(PIN_MOTOR_BM, Motor_Table[Motor_Pos][1]);

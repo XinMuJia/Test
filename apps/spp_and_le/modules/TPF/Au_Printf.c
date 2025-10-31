@@ -6,6 +6,7 @@
 #include "TPH/Au_Printf.h"
 #include "TPH/Au_Motor.h"
 #include "TPH/Au_Timer.h"
+#include "TPH/Au_Spi.h"
 
 #define LOW               0x0
 #define HIGH              0x1
@@ -46,10 +47,10 @@ static void Digital_Write(int pin, int pinState)
             gpio_direction_output(STB1_Pin, pinState);
             break;
         case PIN_STB2:
-            gpio_direction_output(STB1_Pin, pinState);
+            gpio_direction_output(STB2_Pin, pinState);
             break;
         case PIN_STB3:
-            gpio_direction_output(PIN_STB3, pinState);
+            gpio_direction_output(STB3_Pin, pinState);
             break;
         case PIN_STB4:
             gpio_direction_output(PIN_STB4, pinState);
@@ -76,7 +77,7 @@ static void Digital_Write(int pin, int pinState)
  */
 static void Digital_Write_Vhen(int pin,int PinState){
     PRINT_DEBUG("START VHEN");
-	gpio_direction_output(PIN_VHEN,PinState);
+	gpio_direction_output(GPIO_Port_TPH_VH,PinState);
 }
 
 /*
@@ -173,7 +174,7 @@ static void Send_ALine_Data(uint8_t* data)
         addTime[i] = kAddTime * tmpAddTime;
     }
     
-    // Spi_Command(data, TPH_DI_LEN);
+    Spi_Command(data);
     Digital_Write(PIN_LAT, LOW);
     us_delay(LAT_TIME);
     Digital_Write(PIN_LAT, HIGH);
@@ -239,7 +240,7 @@ static void Run_STB(uint8_t Now_STB_num)
  */
 bool Move_And_Start_STB(bool need_stop, uint8_t STBnum)
 {
-    if (need_stop == true || TPH_EN == DISABLE) {
+    if (need_stop == true) {
         PRINT_DEBUG("stop printing!");
         Motor_Stop();
         Stop_Printing();
@@ -331,7 +332,7 @@ void Start_Printing_By_OneSTB(uint8_t STBnum, uint8_t* Data, uint32_t Len)
     while (1) {
         PRINT_DEBUG("printer %d", offset);
         if (Len > offset) {
-            //发送一行数据 48Byte
+            //发送一行数据 20Byte
             Send_ALine_Data(ptr);
             offset += TPH_DI_LEN;
             ptr += TPH_DI_LEN;
@@ -340,6 +341,7 @@ void Start_Printing_By_OneSTB(uint8_t STBnum, uint8_t* Data, uint32_t Len)
             need_stop = true;
         }
         
+        /*  停止打印`*/
         if (Move_And_Start_STB(need_stop, STBnum)) {
             break;
         }
@@ -350,9 +352,7 @@ void Start_Printing_By_OneSTB(uint8_t STBnum, uint8_t* Data, uint32_t Len)
     // Motor_Start();
     // Motor_SmoothSetSpeed(2, 5);
     Motor_Run_Steps(40);
-    // Motor_Start();
     Motor_Stop();
-    // VH_EN(0);
 }
 
 /*
@@ -361,14 +361,14 @@ void Start_Printing_By_OneSTB(uint8_t STBnum, uint8_t* Data, uint32_t Len)
   * @return none	
   * @note   none
  */
+
 static void Set_Debug_Data(uint8_t* Print_Data)
 {
     for (uint32_t len = 0; len < 48*5; len++){
-        Print_Data[len] = 0x55;
+        Print_Data[len] = 0xFF;
     }
     PRINT_DEBUG("Finish Set Debug Data");
 }
-
 
 /*
   * @brief  测试打印模块
@@ -382,20 +382,21 @@ void TestSTB(void)
     //每行48个字节，48*8=384个像素点，打印5行
     uint32_t Print_Len;
     Print_Len = 48 * 5;
+    Set_Debug_Data(Print_Data);
     PRINT_DEBUG("Start TestSTB, Sequence:123456!");
     
     Set_Debug_Data(Print_Data);
     Start_Printing_By_OneSTB(0, Print_Data, Print_Len);
-    Set_Debug_Data(Print_Data);
-    Start_Printing_By_OneSTB(1, Print_Data, Print_Len);
-    Set_Debug_Data(Print_Data);
-    Start_Printing_By_OneSTB(2, Print_Data, Print_Len);
-    Set_Debug_Data(Print_Data);
-    Start_Printing_By_OneSTB(3, Print_Data, Print_Len);
-    Set_Debug_Data(Print_Data);
-    Start_Printing_By_OneSTB(4, Print_Data, Print_Len);
-    Set_Debug_Data(Print_Data);
-    Start_Printing_By_OneSTB(5, Print_Data, Print_Len);
+    // Set_Debug_Data(Print_Data);
+    // Start_Printing_By_OneSTB(1, Print_Data, Print_Len);
+    // Set_Debug_Data(Print_Data);
+    // Start_Printing_By_OneSTB(2, Print_Data, Print_Len);
+    // Set_Debug_Data(Print_Data);
+    // Start_Printing_By_OneSTB(3, Print_Data, Print_Len);
+    // Set_Debug_Data(Print_Data);
+    // Start_Printing_By_OneSTB(4, Print_Data, Print_Len);
+    // Set_Debug_Data(Print_Data);
+    // Start_Printing_By_OneSTB(5, Print_Data, Print_Len);
     
     PRINT_DEBUG("Finish TestSTB~");
 }
@@ -412,4 +413,5 @@ void Init_Printer(void)
     Set_Stb_Unable();
     Digital_Write_Vhen(PIN_VHEN, RESET);
     // Init_Spi();
+    OC_EN;
 }

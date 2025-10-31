@@ -3496,14 +3496,14 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,my_task,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,os_time_dly,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Init_Printer,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,gpio_direction_output,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,TestSTB,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Get_State_Timeout,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,log_print,l
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,printf,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,show_battery_level,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,get_vbat_percent,l
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_String,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,sprintf,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_Num,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_Char,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Lcd_Task,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,init_software_rtc,l
@@ -3514,7 +3514,6 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Clean_Safe,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_String_Safe,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,get_current_time,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_String,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Task_Init,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,os_task_create,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,task_info_add,l
@@ -3627,6 +3626,7 @@ objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Clear_AddTime,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Move_And_Start_STB,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Motor_Stop,l
+-r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Motor_Run,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Motor_Run_Steps,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Start_Printing_By_QueueBuffer,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Get_ble_rx_leftline,
@@ -3638,10 +3638,11 @@ objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TestSTB,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Init_Printer,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Init_Motor,l
--r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Close_Printer_Timeout_Timer,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,gpio_direction_output,l
+-r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Close_Printer_Timeout_Timer,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,us_delay_us,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Open_Printer_Timeout_Timer,l
+-r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Spi_Command,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,addTime,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Heat_Density,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,log_tag_const_i_APP,l
@@ -3665,6 +3666,9 @@ objs/apps/spp_and_le/modules/TPF/Au_Timer.c.o
 -r=objs/apps/spp_and_le/modules/TPF/Au_Timer.c.o,State_Timeout,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Timer.c.o,Printer_Timeout,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Timer.c.o,au_id,pl
+objs/apps/spp_and_le/modules/TPF/Au_Spi.c.o
+-r=objs/apps/spp_and_le/modules/TPF/Au_Spi.c.o,Spi_Command,pl
+-r=objs/apps/spp_and_le/modules/TPF/Au_Spi.c.o,gpio_direction_output,l
 ../../../../cpu/br23/liba/cpu.a.llvm.20816.crc16.c
 -r=../../../../cpu/br23/liba/cpu.a.llvm.20816.crc16.c,crc16_xmodem,pl
 -r=../../../../cpu/br23/liba/cpu.a.llvm.20816.crc16.c,__crc16_mutex_init,pl

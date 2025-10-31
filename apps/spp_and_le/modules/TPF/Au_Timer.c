@@ -15,9 +15,10 @@ struct Au_ID au_id;
 #ifndef US_DELAY_LOOP_FACTOR
 #define US_DELAY_LOOP_FACTOR    10u    // 经验值，越大忙等待越长，需校准
 #endif
-void us_delay_us(unsigned int us)
-{
-    if (!us) {
+
+    void us_delay_us(unsigned int us)
+    {
+        if (!us) {
         return;
     }
 
@@ -43,6 +44,7 @@ void us_delay_us(unsigned int us)
         }
     }
 }
+
 
 /*
   * @brief  上报设备状态定时器回调
