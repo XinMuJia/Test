@@ -146,7 +146,6 @@ u32 adc_get_voltage(u32 ch)
     tmp = (adc_trim & BIT(5)) ? CENTER - tmp1 * 3.2 : CENTER + tmp1 * 3.2;
     adc_res = adc_res * tmp / adc_vbg;
 
-
     /* printf("\n\n vbg %d\n",  adc_get_value(AD_CH_LDOREF));    */
     /* printf("%x VBAT:%d %d mv\n\n", adc_trim,                  */
     /*         adc_get_value(AD_CH_VBAT), adc_res * 4);          */

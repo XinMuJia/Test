@@ -26,8 +26,8 @@ u32 adc_filter_remove_extremes(u32 channel, u8 sample_count, u8 isvoltage)
         if(!isvoltage)
             samples[i] = adc_get_value(channel); // 获取ADC原始值
         else
-        samples[i] = adc_get_voltage(channel); // 获取电压值
-        sum += samples[i];
+            samples[i] = adc_get_voltage(channel); // 获取电压值
+            sum += samples[i];
     }
     
     // 找出最大值和最小值

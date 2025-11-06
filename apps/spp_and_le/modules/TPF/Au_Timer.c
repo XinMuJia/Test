@@ -31,6 +31,12 @@ u16	It_Num;
 u32	It_Loop=0;
 u8 PAPER_ON=0,PAPER_OFF=0;
 
+// 电压百分比
+u8 percentage=0;
+
+// ADC检测
+extern u16	 ADC_Num[3];
+
 struct Au_ID au_id;
 
 #ifndef US_DELAY_LOOP_FACTOR
@@ -45,7 +51,7 @@ ___interrupt static void timer_isr()
     USER_TIMER->CON |= BIT(14); //清pending
 
     // 进纸检测定时器回调
-    // Paper_Check_Timer_Callback(NULL);
+    Paper_Check_Timer_Callback(NULL);
 
     // 打印头控制
     TPH_Check();
@@ -126,99 +132,6 @@ void us_delay_us(unsigned int us)
     }
 }
 
-
-/*
-  * @brief  上报设备状态定时器回调
-  * @param  arg
-  * @return none	
-  * @note   none
- */
-void State_Timer_Callback(void const * arg)
-{
-    // PRINT_DEBUG("State_Timer CB now");
-    State_Timeout = true;
-}
-
-/*
-  * @brief  Timer初始化
-  * @param  none
-  * @return none	
-  * @note   初始化并启动上报设备状态定时器,间歇触发,定时10s
- */
-void Init_Timer(void)
-{
-    au_id.state_timer_id = sys_timer_add(NULL, State_Timer_Callback, 10000); // 10s
-}
-
-/*
-  * @brief  返回上报状态标志
-  * @param  none
-  * @return none	
-  * @note   none
- */
-bool Get_State_Timeout(void)
-{
-    return State_Timeout;
-}
-
-/*
-  * @brief  清除上报状态标志
-  * @param  none
-  * @return none	
-  * @note   none
- */
-void Clean_State_Timeout(void)
-{
-    State_Timeout = false;
-}
-
-/*
-  * @brief  打印超时回调函数
-  * @param  arg
-  * @return none	
-  * @note   none
- */
-void Printer_Timer_Callback(void const * arg)
-{
-    // PRINT_DEBUG("Printer_Timer CB now");
-    Printer_Timeout = true;
-}
-
-/*
-  * @brief  启动打印超时定时器
-  * @param  none
-  * @return none	
-  * @note   单次触发,定时20s
- */
-void Open_Printer_Timeout_Timer(void)
-{
-    Printer_Timeout = false;
-    au_id.printer_timer_id = sys_timer_add(NULL, Printer_Timer_Callback, PRINT_TIME); // 20s
-}
-
-/** @brief  停止打印超时定时器  * @param  none
-  * @return none	
-  * @note   none
- */
-void Close_Printer_Timeout_Timer(void)
-{
-    // osTimerDelete(myStateTimerHandle);
-    sys_timer_del(au_id.state_timer_id);
-    
-    
-}
-
-/*
-  * @brief  获取打印超时标志
-  * @param  none
-  * @return none	
-  * @note   none
- */
-bool Get_Printer_Timeout_Status(void)
-{
-    return Printer_Timeout;
-}
-
 /*
  * @brief  进纸检测定时器回调函数
  * @param  arg 回调参数
@@ -239,8 +152,8 @@ void Paper_Check_Timer_Callback(void const *arg)
         PAPER_OFF++;
     }
     
-    PAPER_ON > PAPER_COUNT_THRESHOLD ? (PAPER_Key = 1) : (PAPER_Key);
-    PAPER_OFF > PAPER_COUNT_THRESHOLD ? (PAPER_Key = 0) : (PAPER_Key);
+    PAPER_ON > PAPER_COUNT_THRESHOLD ? (PAPER_Key = Bit_SET) : (PAPER_Key);
+    PAPER_OFF > PAPER_COUNT_THRESHOLD ? (PAPER_Key = Bit_RESET) : (PAPER_Key);
     PAPER_Key!=Bit_SET?MOTO_EN=DISABLE,TPH_EN=DISABLE:(PAPER_Key);
 }
 

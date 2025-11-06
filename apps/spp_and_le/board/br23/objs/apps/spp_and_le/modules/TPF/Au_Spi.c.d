@@ -111,4 +111,5 @@ objs/apps/spp_and_le/modules/TPF/Au_Spi.c.o: \
   ../../../../include_lib/driver/cpu/br23\asm/rtc.h \
   ../../../../include_lib/driver/cpu/br23\asm/mcpwm.h \
   ../../../../include_lib/driver\device/sdio_host_init.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_TPG_Front.h

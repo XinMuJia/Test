@@ -15,6 +15,9 @@ float addTime[6] = {0};
 //点数-增加时间系数
 #define kAddTime 0.001
 
+//宽度
+// #define TPH_WRITE UpStartUSART[6]
+
 //根据打印头实际打印效果修改打印时间偏移值
 #define STB1_ADDTIME 0
 #define STB2_ADDTIME 0
@@ -46,9 +49,7 @@ uint8_t Heat_Density = 64;
 
 //步进动作
 u8	res;
-
-//打印字符
-extern char TPH_PrintChar[10][24];
+u16	kos;
 
 /*
   * @brief  引脚写入电平
@@ -83,6 +84,26 @@ void Digital_Write(int pin, int pinState)
         default:
             break;
     }
+}
+
+/******************************************************************************
+*	函数说明：检查行打印字符是否溢出
+*	入口数据：x  当前已需打印点行数
+*	          b  行尾预留白
+*	返回值：  ENABLE		有预留
+*						DISABLE		已满，另起一行
+******************************************************************************/
+FunctionalState TPH_Column(u16 x,u16 b)
+{
+	if((x+b)	<	UpStartUSART[6])
+	{
+		return	FUN_ENABLE;
+	}
+	else
+	{
+		return	FUN_DISABLE;
+	}
+	
 }
 
 /*
@@ -134,7 +155,7 @@ void TPH_Loop1(void)
 	MOTO_EN	=	FUN_ENABLE;
 	do
 	{
-	for(m=8;m>0;m--)
+	for(m=4;m>0;m--)
 		{
 			data1=0XFF;
             // Spi_Command(data1);
@@ -150,7 +171,7 @@ void TPH_Loop1(void)
 			}
 		}
 		// TPH_Space(256);
-        TPH_Space(32);
+        TPH_Space(64);
 		TPH_HLAT(Bit_RESET);																	//数据锁存
 		us_delay(LAT_TIME);
 		TPH_HLAT(Bit_SET); 
@@ -158,6 +179,111 @@ void TPH_Loop1(void)
 
 		TPH_PrintNum(0);
 }
+
+/******************************************************************************
+*	函数说明：TPH打印字符函数
+*	入口数据：x		 起始坐标
+*						o		 打印高度
+*           chr  写入的字符
+*           size 字符的大小
+* 返回值：  无
+******************************************************************************/
+void TPH_PrintChar(u16 x,u8 o,u8 chr,u8 size)
+{
+	u8 c,j,k;
+	u8 data1,DATA1;
+	c=chr-' ';																				//得到偏移后的值
+	o*=size/16;																				//计算当前打印的行数
+	for(j=0;j < size/16;j++)													            //当前字符打印对需要的字节数
+	{	
+		if(size==16)data1=TPH_F8X16[c][o];							                        //查找字库
+		else if(size==32)data1=TPH_F12X24[c][o+j];
+		else return;																		//未找到相应字符大小直接返回
+	//	j==1?(k=4):(k=0);
+		for(k=0;k<8;k++)																    //输入一个字节数据
+		{
+			DATA1=0x00;
+			if(data1	&	0x80)															//高位在前
+			{
+				kos++;
+				DATA1=0x88;
+			}
+			TPH_WR_Byte(DATA1);
+			data1 <<= 1;
+		}
+	}
+}
+
+extern 	u8 TPH_LAN_TEST;
+/******************************************************************************
+*	函数说明：TPH打印字符串
+*	入口数据：x  		起始坐标
+            *dp 	写入的字符串
+            size	字符的大小
+*	返回值：  无
+******************************************************************************/
+void 	TPH_PrintString(u16 x,char *dp,u8 size)
+{
+	u8	o,k,Ta;
+	u8	Wide,Tall,Column;
+	u16	z;
+	u16	Header;
+	FunctionalState	loop;
+	kos=0;
+	Ta=size;
+	Ta>16?(Ta=32):(Ta=16);
+	Wide=16;																	//ASCII 字符宽														
+	Tall=size;																		//ASCII 字符高
+	Header=x;																			//前留白
+	Column=0;																			//字符串所打印行数
+	TPH_EN	=	ENABLE;
+	MOTO_EN	=	ENABLE;	
+	do
+	{
+		loop=	DISABLE;															//字符串打印循环初始化
+		for(o=0;o<Tall;o++)													//打印字符高度循环
+		{
+			k	=	Column;																//现在打印的字符寻址位
+			z	=	Header;																//行打印点数初始							
+			TPH_Space(Header);
+			while(dp[k]!='\0')												
+			{
+				TPH_PrintChar(Header,o,dp[k],Ta);			
+				k++;																		//字符寻址位计数
+				z+=Wide;																//已打印行点阵数计数
+				if(kos>=200)														//当打印有效位等于96点 或者 数据传输完毕时 进行一次加热
+				{
+						TPH_Print1(UpStartUSART[6]-z);
+						TPH_Space(z);
+						kos=0;
+				}
+				if(TPH_Column(z,0) !=	ENABLE)						
+				{
+					loop	=	ENABLE;												//继续循环
+					break;
+				}
+			}
+				if(TPH_LAN_TEST	==	1)
+				{
+					TPH_Space(UpStartUSART[6]-z);		
+					TPH_HLAT(Bit_SET); 											//LAN测试
+				}
+				else
+				{
+					TPH_Space(UpStartUSART[6]-z);		
+					TPH_HLAT(Bit_RESET);																	//数据锁存
+					us_delay(LAT_TIME);
+					TPH_HLAT(Bit_SET); 
+				}
+			while(MOTO_EN_It	==	ENABLE && MOTO_EN==ENABLE);
+				
+			TPH_PrintNum(0);
+			kos=0;
+		}
+		Column	=	k;																//寻址位缓存
+	}while(loop	==	ENABLE && dp[k]!='\0');				//字符打印完毕，结束循环
+}
+
 
 /*******************************************************************************
     * 函数说明：TPH空行打印
@@ -173,6 +299,22 @@ void TPH_Space(u16	x)
     }
 }
 
+
+/*******************************************************************************
+    * 函数说明：TPH开始打印
+    * 入口数据：x 	打印点数
+    * 返回值：  无
+*******************************************************************************/
+void	TPH_Print1(u16 x)
+{
+	TPH_Space(x);																	//补足剩下所对齐的点阵数
+	while(TPH_EN_It != DISABLE);
+	TPH_HLAT(Bit_RESET);																	//数据锁存
+    us_delay(LAT_TIME);
+	TPH_HLAT(Bit_SET); 
+	It_Num=0;
+	TPH_EN_It	= ENABLE;
+}
 
 
 /*

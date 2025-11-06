@@ -26,6 +26,7 @@
         "au_timer.h": "c",
         "au_spi.h": "c",
         "au_printf.h": "c",
-        "au_start.h": "c"
+        "au_start.h": "c",
+        "au_tpg_front.h": "c"
     }
 }

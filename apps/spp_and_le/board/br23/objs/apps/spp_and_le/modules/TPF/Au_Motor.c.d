@@ -123,4 +123,5 @@ objs/apps/spp_and_le/modules/TPF/Au_Motor.c.o: \
   ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_TPG_Front.h

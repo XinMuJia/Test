@@ -15,6 +15,7 @@
 #include "mytask/app_event.h"
 #include "TPH/Au_Motor.h"
 #include "TPH/Au_Printf.h"
+#include "TPH/Au_Adc.h"
 
 
 // 添加日志系统定义
@@ -33,9 +34,16 @@ volatile u8 poweron_detected = 0;
 
 extern u8 lcd_init_complete;
 extern bool Printer_Timeout;
+extern u8 percentage;
 
 // 打印缓存
 char TPH_Cache[10][24];
+
+// ADC获取
+u16	 ADC_Num[3];
+
+// 长度
+u8 	TPH_LAN_TEST;	
 
 /* 任务配置   */
 #define IO_PORTR_00   0
@@ -55,14 +63,17 @@ void my_task(void *p)
     }
 
     Init_Printer();
-    for(int lps=128;lps>0;lps--)
-    {
-        TPH_Loop1();
-    }
+    // for(int lps=64;lps>0;lps--)
+    // {
+    //     TPH_Loop1();
+    // }
+    
+    TPH_PrintString(0,"                      ",16);
+    TPH_PrintString(0,"                      ",16);
+    TPH_PrintString(0," |||||||||| ",16);
+    TPH_PrintString(0,"                      ",16);
     TPH_Esc();
-        
     while(1) {
-        // TPH_Loop1();
         // printf("MOTO_EN : %d / %d", MOTO_EN, MOTO_EN_It);
         os_time_dly(100);
     }
@@ -74,6 +85,7 @@ void show_battery_level(void)
     static u8 last_percentage = 0xFF;
     u8 percentage_num = 3;
     u8 percentage = get_vbat_percent();
+    // u8 percentage = ADC_Num[0];
     printf("vbat==%d\n", percentage);
     if(percentage > 100) percentage = 100;
     
@@ -312,17 +324,49 @@ void Lcd_Task(void)
     }
 }
 
+// void Adc_Get()
+// {
+//     while(1) {
+//         ADC_Num[0] = get_vbat_percent();
+//         os_time_dly(5);
+//         ADC_Num[1] = get_adc_level(ADC_Channel_Paper_Check, Bit_RESET);
+//         // ADC_Num[1] = adc_get_value(ADC_Channel_Paper_Check);
+//         printf("ADC_Num[0]: %d, ADC_Num[1]: %d\n", ADC_Num[0], ADC_Num[1]);
+//         os_time_dly(5); // 100ms
+//     }
+// }
+
+// void Adc_Get()
+// {
+//     static u8 adc_channel = 0;
+    
+//     while(1) {
+//         switch(adc_channel) {
+//         case 0:
+//             ADC_Num[0] = get_vbat_percent();
+//             break;
+//         case 1:
+//             ADC_Num[1] = get_adc_level(ADC_Channel_Paper_Check, Bit_RESET);
+//             break;
+//         }
+        
+//         adc_channel = (adc_channel + 1) % 2;
+//         printf("ADC_Num[0]: %d, ADC_Num[1]: %d\n", ADC_Num[0], ADC_Num[1]);
+//         os_time_dly(5); // 50ms
+//     }
+// }
+
 void Task_Init(void)
 {
     /* os_task_create(app_main_task, (void *)0, TASK_APP_MAIN_NAME); */
     // 创建检测开机按键线程，使用任务表配置参数
-    // os_task_create(key_event_handler ,
+    // os_task_create( Adc_Get ,
     //               (void *)0,
     //               task_info_table[9].prio,
     //               task_info_table[9].stack_size,
     //               0,
     //               task_info_table[9].name);
-    // os_task_create(my_task, (void *)0, "my_task", 4, 256, 0); // 创建自定义任务线程
+
     os_task_create( my_task,
                     (void *)0,
                     task_info_table[8].prio,

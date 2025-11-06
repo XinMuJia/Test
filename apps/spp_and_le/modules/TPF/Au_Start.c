@@ -54,12 +54,12 @@ void UpStart(void)
 *************************************/
 u8 UpStart_Init(void)
 {
-			UpStart_InitStructure.HeatTime	=	8;					//加热时间（HeatTime+1)*0.1ms          
+			UpStart_InitStructure.HeatTime	=	9;					//加热时间（HeatTime+1)*0.1ms          
 			UpStart_InitStructure.Moto1Time	=	5;					//初始电机步进间隔，单位：*0.1ms  //速度公式：(1/(Moto1Time*0.1))*0.03125*1000= mm/s     
 			UpStart_InitStructure.OnePrint	=	96;					//最多一次加热点数参数64，测试96
 			UpStart_InitStructure.PaperC	=	100;				//光耦旁路电容值100pF，单位：pF
 			UpStart_InitStructure.PaperC_EN	=	FUN_DISABLE;		//不使能旁路电容检测
-			UpStart_InitStructure.PrintWidth=	384;				//一行总加热点数
+			UpStart_InitStructure.PrintWidth=	96;//384			//一行总加热点数
 			UpStart_InitStructure.Refer_Arr	=	176;				//点电阻值，单位：R，欧姆
 			UpStart_InitStructure.Refer_TM	=	320;				//热敏电阻参数30KR，单位：R，欧姆
 			UpStart_InitStructure.SpinO		=	3500;				//电机电感参数，单位：uH
