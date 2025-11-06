@@ -15,8 +15,8 @@
 #define TEMP_ADC_RESOLUTION    4096        // ADC分辨率 12位
 
 /*  函数声明  */
-u32 adc_filter_remove_extremes(u32 channel, u8 sample_count);
-u16 get_adc_level(u32 channel);
+u32 adc_filter_remove_extremes(u32 channel, u8 sample_count, u8 isvoltage);
+u16 get_adc_level(u32 channel, u8 isvoltage);
 float calculate_temperature_from_resistance(float resistance);
 float convert_adc_to_resistance(uint32_t adc_value, float vref, float series_resistor, uint32_t adc_resolution);
 float get_temperature(void);

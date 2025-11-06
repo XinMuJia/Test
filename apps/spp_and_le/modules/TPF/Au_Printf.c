@@ -31,8 +31,24 @@ float addTime[6] = {0};
 #define LOG_INFO_ENABLE
 #include "debug.h"
 
+/*  函数声明*/
+extern	u16	                It_Num;
+extern	u16	                UpStartUSART[14];
+extern	FunctionalState	    TPH_EN;
+extern	FunctionalState	    MOTO_EN;
+extern	BitAction	        STB_ON,STB_OFF;
+extern 	FunctionalState     MOTO_EN_It;
+extern 	FunctionalState     TPH_EN_It;
+extern 	FunctionalState 	MOTO_2Esc;
+
 //热密度
 uint8_t Heat_Density = 64;
+
+//步进动作
+u8	res;
+
+//打印字符
+extern char TPH_PrintChar[10][24];
 
 /*
   * @brief  引脚写入电平
@@ -40,7 +56,7 @@ uint8_t Heat_Density = 64;
   * @return none	
   * @note   none
  */
-static void Digital_Write(int pin, int pinState)
+void Digital_Write(int pin, int pinState)
 {
     switch (pin) {
         case PIN_STB1:
@@ -88,46 +104,12 @@ static void Digital_Write_Vhen(int pin,int PinState){
  */
 static void Set_Stb_Unable(void)
 {
-    Digital_Write(PIN_STB1, LOW);
+    Digital_Write(PIN_STB1, HIGH); // 高电平失能
     Digital_Write(PIN_STB2, LOW);
     Digital_Write(PIN_STB3, LOW);
     Digital_Write(PIN_STB4, LOW);
     Digital_Write(PIN_STB5, LOW);
     Digital_Write(PIN_STB6, LOW);
-}
-
-/*
-  * @brief  打印前初始化
-  * @param  none
-  * @return none	
-  * @note   none
- */
-static void Init_Printing(void)
-{
-    PRINT_DEBUG("Init Printing!");
-    //开启打印超时监听
-    Open_Printer_Timeout_Timer();
-    //STB, LAT, VHEN ON
-    Set_Stb_Unable();
-    Digital_Write(PIN_LAT, HIGH);
-    Digital_Write_Vhen(PIN_VHEN, HIGH);
-}
-
-/*
-  * @brief  打印后停止
-  * @param  none
-  * @return none	
-  * @note   none
- */
-static void Stop_Printing(void)
-{
-    PRINT_DEBUG("Stop Printing!");
-    //关闭打印超时监听
-    Close_Printer_Timeout_Timer();
-    //STB, LAT, VHEN OFF
-    Digital_Write_Vhen(PIN_VHEN, LOW);
-    Set_Stb_Unable(); /* 失能通道 */
-    Digital_Write(PIN_LAT, HIGH);
 }
 
 /*
@@ -142,264 +124,56 @@ void Set_Heat_Density(uint8_t Density)
     Heat_Density = Density;
 }
 
-/*
-  * @brief  清除增加时间数组
-  * @param  none
-  * @return none	
-  * @note   none
- */
-void Clear_AddTime(void)
+//打印黑块
+void TPH_Loop1(void)
 {
-    memset(addTime, 0, sizeof(addTime));
+    u8 DATA1;
+	u8 data1;
+	u8	k,m;
+	TPH_EN	=	FUN_ENABLE;
+	MOTO_EN	=	FUN_ENABLE;
+	do
+	{
+	for(m=8;m>0;m--)
+		{
+			data1=0XFF;
+            // Spi_Command(data1);
+            for(k=0;k<8;k++)																//输入一个字节数据
+			{
+				DATA1=0x00;
+				if(data1	&	0x80)															//高位在前
+				{
+					DATA1=0x88;
+				}
+				TPH_WR_Byte(DATA1);
+				data1 <<= 1;
+			}
+		}
+		// TPH_Space(256);
+        TPH_Space(32);
+		TPH_HLAT(Bit_RESET);																	//数据锁存
+		us_delay(LAT_TIME);
+		TPH_HLAT(Bit_SET); 
+	}while(MOTO_EN_It	==	FUN_ENABLE && MOTO_EN	==	FUN_ENABLE);
+
+		TPH_PrintNum(0);
+}
+
+/*******************************************************************************
+    * 函数说明：TPH空行打印
+    * 入口数据：x 	空打印点数
+    * 返回值：  无
+*******************************************************************************/
+void TPH_Space(u16	x)
+{
+    u16	c;
+    for(c=x;c>0;c--)
+    {
+        TPH_WR_Byte(0x00);
+    }
 }
 
 
-/*
-  * @brief  发送一行数据
-  * @param  data:数据
-  * @return none	
-  * @note   根据数据动态调整打印时间
- */
-static void Send_ALine_Data(uint8_t* data)
-{
-    PRINT_DEBUG("Start send a line Data!"); 
-    float tmpAddTime = 0;
-    Clear_AddTime();
-    
-    for (uint8_t i = 0; i < 6; ++i) {
-        for (uint8_t j = 0; j<8; ++j) {
-            addTime[i] += data[i*8+j];
-        }
-        tmpAddTime = addTime[i] * addTime[i];
-        addTime[i] = kAddTime * tmpAddTime;
-    }
-    
-    Spi_Command(data);
-    Digital_Write(PIN_LAT, LOW);
-    us_delay(LAT_TIME);
-    Digital_Write(PIN_LAT, HIGH);
-}
-
-
-/*
-  * @brief  通道打印运行
-  * @param  当前通道号
-  * @return none	
-  * @note   none
- */
-static void Run_STB(uint8_t Now_STB_num)
-{
-    PRINT_DEBUG("Start Run STB!");
-    switch (Now_STB_num) {
-        case 0:
-            Digital_Write(PIN_STB1, 1);
-            us_delay((PRINT_TIME + addTime[0] + STB1_ADDTIME) * ((double)Heat_Density / 100));
-            Digital_Write(PIN_STB1, 0);
-            us_delay(PRINT_END_TIME);
-            break;
-        case 1:
-            Digital_Write(PIN_STB2, 1);
-            us_delay((PRINT_TIME + addTime[1] + STB2_ADDTIME) * ((double)Heat_Density / 100));
-            Digital_Write(PIN_STB2, 0);
-            us_delay(PRINT_END_TIME);
-            break;
-        case 2:
-            Digital_Write(PIN_STB3, 1);
-            us_delay((PRINT_TIME + addTime[2] + STB3_ADDTIME) * ((double)Heat_Density / 100));
-            Digital_Write(PIN_STB3, 0);
-            us_delay(PRINT_END_TIME);
-            break;
-        case 3:
-            Digital_Write(PIN_STB4, 1);
-            us_delay((PRINT_TIME + addTime[3] + STB4_ADDTIME) * ((double)Heat_Density / 100));
-            Digital_Write(PIN_STB4, 0);
-            us_delay(PRINT_END_TIME);
-            break;
-        case 4:
-            Digital_Write(PIN_STB5, 1);
-            us_delay((PRINT_TIME + addTime[4] + STB5_ADDTIME) * ((double)Heat_Density / 100));
-            Digital_Write(PIN_STB5, 0);
-            us_delay(PRINT_END_TIME);
-            break;
-        case 5:
-            Digital_Write(PIN_STB6, 1);
-            us_delay((PRINT_TIME + addTime[5] + STB6_ADDTIME) * ((double)Heat_Density / 100));
-            Digital_Write(PIN_STB6, 0);
-            us_delay(PRINT_END_TIME);
-            break;
-        default:
-            break;
-    }
-}
-
-/*
-  * @brief  移动电机&开始打印
-  * @param  needstop, STBnum
-  * @return none	
-  * @note   none
- */
-bool Move_And_Start_STB(bool need_stop, uint8_t STBnum)
-{
-    if (need_stop == true) {
-        PRINT_DEBUG("stop printing!");
-        Motor_Stop();
-        Stop_Printing();
-        return true;
-    }
-    
-    //4Steps a line
-    Motor_Run();
-    if (STBnum == ALL_STB_NUM) {
-        //所有通道打印
-        for (uint8_t index = 0; index<6; index++) {
-            Run_STB(index);
-            
-            //在通道加热的同时将电机运行信号插入
-            if (index == 1 || index == 3 || index == 5) {
-                Motor_Run();
-            }
-        }
-        
-    }
-    else {
-        //单通道打印
-        Run_STB(STBnum);
-        Motor_Run_Steps(3);
-    }
-    
-    return false;
-}
-
-/*
-  * @brief  队列缓冲区打印
-  * @param  none 
-  * @return none	
-  * @note   none
- */
-void Start_Printing_By_QueueBuffer(void)
-{
-    uint8_t * pData = NULL;
-    uint32_t PrinterCount = 0;
-    Init_Printing();
-    
-    while (1) {
-        if (Get_ble_rx_leftline() > 0) {
-            //从缓冲区读取一行数据
-            pData = Read_To_PrintBuffer();
-            if (pData != NULL) {
-                PrinterCount++;
-                Send_ALine_Data(pData);
-                if (Move_And_Start_STB(false, ALL_STB_NUM)) {
-                    break;
-                }
-            }
-        }
-        else {
-            //停止打印
-            if (Move_And_Start_STB(true, ALL_STB_NUM)) {
-                break;
-            }
-        }
-        
-        if (Get_Printer_Timeout_Status()) {
-            break;
-        }
-    }
-    
-    Motor_Run_Steps(100);
-    Motor_Stop();
-    Clean_Blepack_Count();
-    PRINT_DEBUG("Start_Printing_By_QueueBuffer: PrintingFinish, Recv: %d", PrinterCount);
-}
-  
-/*
-  * @brief  单通道打印
-  * @param  STBnum:通道号, Data:数据
-  * @return none	
-  * @note   none
- */
-void Start_Printing_By_OneSTB(uint8_t STBnum, uint8_t* Data, uint32_t Len)
-{
-    PRINT_DEBUG("Start Printing By One STB!");
-    if (TPH_DI_LEN == 0 || Data == NULL || Len == 0) {
-        log_info("invalid print params: TPH_DI_LEN=%d, Len=%u", TPH_DI_LEN, Len);
-        return;
-    }
-    uint32_t offset = 0;
-    uint8_t* ptr = Data;
-    bool need_stop = false;
-    Init_Printing();
-    while (1) {
-        PRINT_DEBUG("printer %d", offset);
-        if (Len > offset) {
-            //发送一行数据 20Byte
-            Send_ALine_Data(ptr);
-            offset += TPH_DI_LEN;
-            ptr += TPH_DI_LEN;
-        }
-        else {
-            need_stop = true;
-        }
-        
-        /*  停止打印`*/
-        if (Move_And_Start_STB(need_stop, STBnum)) {
-            break;
-        }
-        if (Get_Printer_Timeout_Status()) {
-            break;
-        }
-    }
-    // Motor_Start();
-    // Motor_SmoothSetSpeed(2, 5);
-    Motor_Run_Steps(40);
-    Motor_Stop();
-}
-
-/*
-  * @brief  设置TESTSTB数据
-  * @param  Print_Data:传入数组
-  * @return none	
-  * @note   none
- */
-
-static void Set_Debug_Data(uint8_t* Print_Data)
-{
-    for (uint32_t len = 0; len < 48*5; len++){
-        Print_Data[len] = 0xFF;
-    }
-    PRINT_DEBUG("Finish Set Debug Data");
-}
-
-/*
-  * @brief  测试打印模块
-  * @param  none
-  * @return none	
-  * @note   none
- */
-void TestSTB(void)
-{
-    uint8_t Print_Data[48*6];
-    //每行48个字节，48*8=384个像素点，打印5行
-    uint32_t Print_Len;
-    Print_Len = 48 * 5;
-    Set_Debug_Data(Print_Data);
-    PRINT_DEBUG("Start TestSTB, Sequence:123456!");
-    
-    Set_Debug_Data(Print_Data);
-    Start_Printing_By_OneSTB(0, Print_Data, Print_Len);
-    // Set_Debug_Data(Print_Data);
-    // Start_Printing_By_OneSTB(1, Print_Data, Print_Len);
-    // Set_Debug_Data(Print_Data);
-    // Start_Printing_By_OneSTB(2, Print_Data, Print_Len);
-    // Set_Debug_Data(Print_Data);
-    // Start_Printing_By_OneSTB(3, Print_Data, Print_Len);
-    // Set_Debug_Data(Print_Data);
-    // Start_Printing_By_OneSTB(4, Print_Data, Print_Len);
-    // Set_Debug_Data(Print_Data);
-    // Start_Printing_By_OneSTB(5, Print_Data, Print_Len);
-    
-    PRINT_DEBUG("Finish TestSTB~");
-}
 
 /*
   * @brief  打印模块初始化
@@ -409,9 +183,54 @@ void TestSTB(void)
  */
 void Init_Printer(void)
 {
-    Init_Motor();
-    Set_Stb_Unable();
-    Digital_Write_Vhen(PIN_VHEN, RESET);
-    // Init_Spi();
+    Init_Motor(); // 初始化电机
+    Set_Stb_Unable(); // 失能所有通道
+    Digital_Write(PIN_LAT, HIGH); // 锁存引脚高电平
+    gpio_direction_output(GPIO_Port_TPH_DI, LOW); // 数据引脚低电平
+    gpio_direction_output(GPIO_Port_TPH_CLK, LOW); // 时钟引脚低电平
+    Digital_Write_Vhen(PIN_VHEN, HIGH);
     OC_EN;
+    TPH_EN	=	FUN_ENABLE;
+	MOTO_EN	=	FUN_ENABLE;	
+	res	=	0;
+    os_time_dly(50);
+}
+
+void TPH_Esc(void)
+{
+	Digital_Write_Vhen(PIN_VHEN, LOW);
+	TPH_EN	=	FUN_DISABLE;
+	MOTO_EN	=	FUN_DISABLE;
+	// MOTOR_STEP(0x06);	
+    // 电机归零/释放
+    MOTOR_STEP(0x00);  // 所有相位断电
+    os_time_dly(10);
+}
+
+
+/******************************************************************************
+*	函数说明：TPH打印开始
+*	入口数据：x		已输入行点阵数
+*	返回值：  无
+*	说明：
+			补足行点数
+			锁存
+			加热
+			走步
+******************************************************************************/
+extern	BitAction	PAPER_Key;
+void	TPH_PrintNum(u16 x)
+{
+	
+		TPH_EN_It	= 	FUN_ENABLE;
+		MOTO_EN_It = 	FUN_ENABLE;														//关闭中断执行中MOTO的使能
+/*	TPH_EN_It	= 	ENABLE;
+	MOTO_EN_It = 	ENABLE;														//关闭中断执行中MOTO的使能
+	while(MOTO_EN_It == ENABLE)
+	{
+		if(PAPER_Key	==	Bit_RESET)
+		{
+			break;
+		}
+	}*/
 }

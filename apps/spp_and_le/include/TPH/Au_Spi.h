@@ -9,7 +9,6 @@
 #define TPH_HDI(Temp)		gpio_direction_output(GPIO_Port_TPH_DI, Temp)	
 
 void Spi_Command(u8 data_buffer);
-
-void Init_Spi(void);
+void TPH_WR_Byte(u8 dat);
 
 #endif

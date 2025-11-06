@@ -103,7 +103,7 @@ u16 get_vbat_level(void)
 {
     //return 370;     //debug
     // return (adc_get_voltage(AD_CH_VBAT) * 4 / 10);
-    return get_adc_level(AD_CH_VBAT);
+    return get_adc_level(AD_CH_VBAT, Bit_SET);
 }
 
 /**

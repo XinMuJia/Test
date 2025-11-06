@@ -18,10 +18,6 @@ struct Au_ID
 };
 
 // 进纸检测相关变量
-static uint16_t PAPER_ON = 0;
-static uint16_t PAPER_OFF = 0;
-static uint8_t PAPER_Key = 0;
-
 #define PAPER_THRESHOLD 550
 #define PAPER_COUNT_THRESHOLD 100
 
@@ -37,7 +33,13 @@ void Open_Printer_Timeout_Timer(void);
 void Close_Printer_Timeout_Timer(void);
 bool Get_Printer_Timeout_Status(void);
 void us_delay_us(unsigned int us);
+void TPH_Check(void);
+void TPH_Space(u16	x);
+void Moto_Check(void);
 // 进纸检测定时器
-void Init_Paper_Check_Timer(void);
+void Paper_Check_Timer_Callback(void const *arg);
+
+// 定时器3初始化
+void timer3_init(u32 usec);
 
 #endif // AU_TIMER_H

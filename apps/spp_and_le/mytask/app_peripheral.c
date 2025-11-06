@@ -13,6 +13,8 @@
 #include "rtc_alarm.h"
 #include "iokey.h"
 #include "mytask/app_event.h"
+#include "TPH/Au_Timer.h"
+#include "TPH/Au_Start.h"
 
 /* 气泵配置   */
 #define IO_PORTR_00   0
@@ -34,5 +36,7 @@ void Pump_Init(void)
 
 void Peripheral_Init(void)
 {
+    UpStart();
     Pump_Init();
+    timer3_init(200); // 初始化定时器3，200us中断
 }

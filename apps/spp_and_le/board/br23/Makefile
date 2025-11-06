@@ -218,6 +218,7 @@ INCLUDES := \
 	-I../../../../apps/spp_and_le/include/TPF/Au_Printf \
 	-I../../../../apps/spp_and_le/include/TPF/Au_Timer \
 	-I../../../../apps/spp_and_le/include/TPF/Au_Spi \
+	-I../../../../apps/spp_and_le/include/TPF/Au_Start \
 	-I$(SYS_INC_DIR) \
 
 
@@ -469,6 +470,7 @@ c_SRC_FILES := \
 	../../../../apps/spp_and_le/modules/TPF/Au_Printf.c \
 	../../../../apps/spp_and_le/modules/TPF/Au_Timer.c \
 	../../../../apps/spp_and_le/modules/TPF/Au_Spi.c \
+	../../../../apps/spp_and_le/modules/TPF/Au_Start.c \
 
 
 # 需要编译的 .S 文件

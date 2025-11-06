@@ -56,8 +56,6 @@ void handle_long_press(u8 key_value)
             set_key_poweron_flag(1); 
 
             // 开机
-            // gpio_direction_output(IO_PORTB_11, 1);     
-            // gpio_write(IO_PORTB_11, 1);
             rtc_port_pr_out(IO_PORTR_01, OUT_HIGH);
 
             log_info("is poweron");
@@ -65,7 +63,6 @@ void handle_long_press(u8 key_value)
         } else { // 关机
             log_info("-");
             set_key_poweron_flag(0); 
-            // gpio_write(IO_PORTB_11, 0);
             rtc_port_pr_out(IO_PORTR_01, OUT_LOW);
             poweron_detected = 0;
         }
@@ -174,6 +171,7 @@ void handle_key_release(u8 key_value)
 void key_event_handler(struct sys_event *event)
 {
     printf("Key event detected:\n");
+    // local_irq_disable();  // 禁用中断
     if (event->type == SYS_KEY_EVENT) {
         printf("Key_event:\n");
         // 确保是按键事件
@@ -220,11 +218,13 @@ void key_event_handler(struct sys_event *event)
             }
         }
     }
+    // local_irq_enable();   // 重新启用中断
 }
 
 // 在系统初始化时注册事件处理函数
 void app_main_init(void)
 {
     // 注册按键事件处理
-    register_sys_event_handler(SYS_KEY_EVENT, DEVICE_EVENT_FROM_KEY, 1, key_event_handler);
+    register_sys_event_handler(SYS_KEY_EVENT, DEVICE_EVENT_FROM_KEY, 0, key_event_handler);
+    // sys_hi_timer_add(NULL, key_event_handler, 50); // 每100ms检查一次按键事件(硬件定时器)
 }

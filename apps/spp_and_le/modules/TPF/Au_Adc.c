@@ -13,7 +13,7 @@
   * @param   sample_count: 采样次数(建议3~10)
   * @return  滤波后的ADC值
   */
-u32 adc_filter_remove_extremes(u32 channel, u8 sample_count)
+u32 adc_filter_remove_extremes(u32 channel, u8 sample_count, u8 isvoltage)
 {
     if(sample_count < 3) sample_count = 3;  // 至少3次采样
     
@@ -23,7 +23,10 @@ u32 adc_filter_remove_extremes(u32 channel, u8 sample_count)
     
     // 采集多个样本
     for(int i = 0; i < sample_count; i++) {
-        samples[i] = adc_get_voltage(channel);
+        if(!isvoltage)
+            samples[i] = adc_get_value(channel); // 获取ADC原始值
+        else
+        samples[i] = adc_get_voltage(channel); // 获取电压值
         sum += samples[i];
     }
     
@@ -43,7 +46,7 @@ u32 adc_filter_remove_extremes(u32 channel, u8 sample_count)
   * @brief   ADC 获取电压值
   * @return  滤波后的电压等级
   */
- u16 get_adc_level(u32 channel)
+ u16 get_adc_level(u32 channel, u8 isvoltage)
  {
     // 指数平滑滤波参数: shift 为 N 则 alpha = 1/(2^N)
     // 范围: 2~6 (2: 快，6: 平滑)
@@ -56,7 +59,7 @@ u32 adc_filter_remove_extremes(u32 channel, u8 sample_count)
     #endif
 
     // u32 raw = adc_get_voltage(AD_CH_VBAT);
-    u32 raw = adc_filter_remove_extremes(channel, ALL_SAMPLE_COUNT);
+    u32 raw = adc_filter_remove_extremes(channel, ALL_SAMPLE_COUNT, isvoltage);
 #if (VBAT_FILTER_SHIFT > 0)
     static u32 vbat_filt = 0;
     if (vbat_filt == 0) {
@@ -139,7 +142,7 @@ float get_temperature(void)
     uint16_t filtered_adc = 0;
     
     // 使用你的通用ADC滤波函数获取温度通道的滤波值
-    filtered_adc = get_adc_level(AD_CH_TEMP);  // 假设AD_CH_TEMP是温度通道
+    filtered_adc = get_adc_level(AD_CH_TEMP, Bit_RESET); 
     
     // 将ADC值转换为电阻值 (10K串联电阻，3.3V参考电压，12位ADC)
     resistance = convert_adc_to_resistance(filtered_adc, 3.3f, 10000.0f, 4096);
@@ -160,7 +163,7 @@ float get_temperature(void)
 float get_temperature_quick(void)
 {
     // 直接使用滤波后的ADC值计算温度
-    uint16_t filtered_adc = get_adc_level(AD_CH_TEMP);
+    uint16_t filtered_adc = get_adc_level(AD_CH_TEMP, Bit_RESET);
     float voltage = (float)filtered_adc * 3.3f / 4096.0f;
     float resistance = (voltage * 10000.0f) / (3.3f - voltage);
     

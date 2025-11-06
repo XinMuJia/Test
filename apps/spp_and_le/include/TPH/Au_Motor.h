@@ -15,13 +15,12 @@ extern uint8_t Motor_Table[8][4];
 
 // 函数声明
 void Init_Motor(void);
-void Motor_Start(void);
-void Motor_Stop(void);
 void Motor_Run(void);
 void Motor_Run_Steps(uint32_t steps);
 void Motor_Test(void);
-void Motor_SmoothSetSpeed(u32 target_period_ms, u32 step_delay_ms);
+void Motor_Write(int pin, int PinState);
 
+extern u8 step_sequence[8];
 #define MOTOR_STEP(temp) do { \
     Motor_Write(PIN_MOTOR_AM, (BitAction)(temp & 0x01)); \
     Motor_Write(PIN_MOTOR_AP, (BitAction)((temp & 0x02) >> 1)); \

@@ -128,4 +128,7 @@ objs/apps/spp_and_le/mytask/app_peripheral.c.o: \
   ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
   ../../../../apps/spp_and_le/include\mytask/app_time.h \
   ../../../../apps/spp_and_le/include\rtc_alarm.h \
-  ../../../../apps/spp_and_le/include\mytask/app_event.h
+  ../../../../apps/spp_and_le/include\mytask/app_event.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Start.h

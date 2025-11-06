@@ -34,6 +34,8 @@ volatile u8 poweron_detected = 0;
 extern u8 lcd_init_complete;
 extern bool Printer_Timeout;
 
+// 打印缓存
+char TPH_Cache[10][24];
 
 /* 任务配置   */
 #define IO_PORTR_00   0
@@ -41,9 +43,9 @@ extern bool Printer_Timeout;
 #define OUT_LOW       0
 #define OUT_HIGH      1
 
-void rtc_32k_clock_test();
-void start_rtc_clock_test();
-
+extern FunctionalState	MOTO_EN_It;
+extern FunctionalState	MOTO_EN;
+BitAction	    PAPER_Key;
 /* 打印 */
 void my_task(void *p)
 {
@@ -53,15 +55,15 @@ void my_task(void *p)
     }
 
     Init_Printer();
-    TestSTB();
+    for(int lps=128;lps>0;lps--)
+    {
+        TPH_Loop1();
+    }
+    TPH_Esc();
+        
     while(1) {
-        if (Get_State_Timeout()) {
-            // 在任务上下文打印或处理超时逻辑（safe）
-            log_info("Printer timeout handled in task");
-        }
-
-        log_info("Printer timeout handled in task");
-        printf("my_task\n");
+        // TPH_Loop1();
+        // printf("MOTO_EN : %d / %d", MOTO_EN, MOTO_EN_It);
         os_time_dly(100);
     }
 }

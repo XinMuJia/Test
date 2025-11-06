@@ -123,4 +123,10 @@ objs/apps/spp_and_le/modules/TPF/Au_Timer.c.o: \
   ../../../../apps/spp_and_le/include\app_action.h \
   ../../../../apps/spp_and_le/include\app_main.h \
   ../../../../include_lib/update\update.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h
+  ../../../../apps/spp_and_le/include\TPH/Au_Motor.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
+  C:/JL/pi32/pi32v2-include\time.h \
+  C:/JL/pi32/pi32v2-include\machine/time.h \
+  C:/JL/pi32/pi32v2-include\sys/timespec.h \
+  C:/JL/pi32/pi32v2-include\sys/_timespec.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Adc.h

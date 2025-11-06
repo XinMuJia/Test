@@ -175,6 +175,7 @@ void app_main()
         int update = 0;
         update = update_result_deal();
     }
+    
     Peripheral_Init(); // 初始化外设
     app_main_init(); // app事件初始化
     Task_Init(); // 初始化自定义任务
