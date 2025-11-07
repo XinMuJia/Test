@@ -259,8 +259,8 @@ void init_software_rtc(void)
     software_rtc_initialized = 1;
 
     /* 创建 1 秒周期定时器以保持软件 RTC 运行 */
-    // sys_timer_add(NULL, update_software_rtc, 1000);
-    sys_hi_timer_add(NULL, update_software_rtc, 1000);
+    sys_timer_add(NULL, update_software_rtc, 1000);
+    // sys_hi_timer_add(NULL, update_software_rtc, 1000);
 }
 
 /* 从软件 RTC 获取当前时间（计算自上次基准以来的增量） */

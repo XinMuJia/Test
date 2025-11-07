@@ -3497,7 +3497,6 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,os_time_dly,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Init_Printer,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,TPH_PrintString,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,TPH_Esc,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,show_battery_level,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,get_vbat_percent,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,printf,l
@@ -3560,7 +3559,7 @@ objs/apps/spp_and_le/mytask/app_time.c.o
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,update_software_rtc,pl
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,sys_timer_get_ms,l
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,init_software_rtc,pl
--r=objs/apps/spp_and_le/mytask/app_time.c.o,usr_timer_add,l
+-r=objs/apps/spp_and_le/mytask/app_time.c.o,sys_timer_add,l
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,get_current_time,pl
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,set_system_time,pl
 objs/apps/spp_and_le/mytask/app_event.c.o
@@ -3582,6 +3581,7 @@ objs/apps/spp_and_le/mytask/app_event.c.o
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,handle_hold,pl
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,handle_key_release,pl
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,key_event_handler,pl
+-r=objs/apps/spp_and_le/mytask/app_event.c.o,clr_wdt,l
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,printf,l
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,app_main_init,pl
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,register_sys_event_handler,l
@@ -3598,6 +3598,7 @@ objs/apps/spp_and_le/mytask/app_peripheral.c.o
 -r=objs/apps/spp_and_le/mytask/app_peripheral.c.o,Peripheral_Init,pl
 -r=objs/apps/spp_and_le/mytask/app_peripheral.c.o,UpStart,l
 -r=objs/apps/spp_and_le/mytask/app_peripheral.c.o,timer3_init,l
+-r=objs/apps/spp_and_le/mytask/app_peripheral.c.o,adc_add_sample_ch,l
 objs/apps/spp_and_le/modules/TPF/Au_Adc.c.o
 -r=objs/apps/spp_and_le/modules/TPF/Au_Adc.c.o,adc_filter_remove_extremes,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Adc.c.o,adc_get_value,l

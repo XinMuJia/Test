@@ -15,6 +15,7 @@
 #include "mytask/app_event.h"
 #include "TPH/Au_Timer.h"
 #include "TPH/Au_Start.h"
+#include "TPH/Au_Printf.h"
 
 /* 气泵配置   */
 #define IO_PORTR_00   0
@@ -39,4 +40,5 @@ void Peripheral_Init(void)
     UpStart();
     Pump_Init();
     timer3_init(200); // 初始化定时器3，200us中断
+    adc_add_sample_ch(ADC_Channel_Paper_Check);
 }

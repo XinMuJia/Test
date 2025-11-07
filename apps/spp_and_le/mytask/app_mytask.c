@@ -71,7 +71,7 @@ void my_task(void *p)
     TPH_PrintString(0,"! # $ %% & ",24);
     TPH_PrintString(0,": ; < = > ? @ A B C D E F G H I J K L M N O P Q",24);
     TPH_PrintString(0," |||||||||| ",24);
-    TPH_Esc();
+    // TPH_Esc();
     while(1) {
         // TPH_PrintString(0,"hello",16);
         os_time_dly(100);
@@ -84,7 +84,6 @@ void show_battery_level(void)
     static u8 last_percentage = 0xFF;
     u8 percentage_num = 3;
     u8 percentage = get_vbat_percent();
-    // u8 percentage = ADC_Num[0];
     printf("vbat==%d\n", percentage);
     if(percentage > 100) percentage = 100;
     

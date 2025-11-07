@@ -170,6 +170,9 @@ void handle_key_release(u8 key_value)
 // 按键事件处理函数
 void key_event_handler(struct sys_event *event)
 {
+    // 添加喂狗操作，防止处理过程中看门狗超时
+    clr_wdt();
+
     printf("Key event detected:\n");
     // local_irq_disable();  // 禁用中断
     if (event->type == SYS_KEY_EVENT) {

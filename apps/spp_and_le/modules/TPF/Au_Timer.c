@@ -140,9 +140,20 @@ void us_delay_us(unsigned int us)
  */
 void Paper_Check_Timer_Callback(void const *arg)
 {
+    u32 adc_value = get_adc_level(ADC_Channel_Paper_Check, Bit_RESET);
+    
+    // 增加有效性检查
+    if(adc_value == 0) {
+        // 可能是采样未完成，暂时忽略本次采样
+        return;
+    }
+    
+
     // 进纸判断*******************
-    if (get_adc_level(ADC_Channel_Paper_Check, Bit_RESET) < PAPER_THRESHOLD)  // ADC默认值 判断进纸
+    if (adc_value < PAPER_THRESHOLD)  // ADC默认值 判断进纸
     {
+        // get_adc_level(ADC_Channel_Paper_Check, Bit_RESET)
+        // adc_get_value(ADC_Channel_Paper_Check)
         PAPER_ON++;
         PAPER_OFF = 0;
     }

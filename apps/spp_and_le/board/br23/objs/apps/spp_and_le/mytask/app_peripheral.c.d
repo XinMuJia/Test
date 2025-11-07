@@ -131,4 +131,6 @@ objs/apps/spp_and_le/mytask/app_peripheral.c.o: \
   ../../../../apps/spp_and_le/include\mytask/app_event.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Start.h
+  ../../../../apps/spp_and_le/include\TPH/Au_Start.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_TPG_Front.h
