@@ -6,7 +6,7 @@
 #include "TPH/Au_TPG_Front.h"
 
 //每行总点数
-#define TPH_DOTS_PER_LINE 96
+#define TPH_DOTS_PER_LINE 384//96
 //每行字节长度
 #define TPH_DI_LEN 8
 //所有通道打印
@@ -52,6 +52,6 @@ void TPH_Loop1(void);
 void Digital_Write(int pin, int pinState);
 void TPH_PrintChar(u16 x,u8 o,u8 chr,u8 size);
 void TPH_PrintString(u16 x,char *dp,u8 size);
-void	TPH_Print1(u16 x);
+void TPH_Print1(u16 x);
 
 #endif  //__AU_PRINTF_H__

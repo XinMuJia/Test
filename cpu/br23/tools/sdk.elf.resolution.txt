@@ -3560,7 +3560,7 @@ objs/apps/spp_and_le/mytask/app_time.c.o
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,update_software_rtc,pl
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,sys_timer_get_ms,l
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,init_software_rtc,pl
--r=objs/apps/spp_and_le/mytask/app_time.c.o,sys_timer_add,l
+-r=objs/apps/spp_and_le/mytask/app_time.c.o,usr_timer_add,l
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,get_current_time,pl
 -r=objs/apps/spp_and_le/mytask/app_time.c.o,set_system_time,pl
 objs/apps/spp_and_le/mytask/app_event.c.o
@@ -3632,6 +3632,7 @@ objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_Space,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,us_delay_us,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_PrintNum,pl
+-r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_Loop2,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_PrintChar,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_PrintString,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_Print1,pl

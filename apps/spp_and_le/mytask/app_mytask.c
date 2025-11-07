@@ -65,16 +65,15 @@ void my_task(void *p)
     Init_Printer();
     // for(int lps=64;lps>0;lps--)
     // {
-    //     TPH_Loop1();
+    //     TPH_Loop2();
     // }
-    
-    TPH_PrintString(0,"                      ",16);
-    TPH_PrintString(0,"                      ",16);
-    TPH_PrintString(0," |||||||||| ",16);
-    TPH_PrintString(0,"                      ",16);
+    TPH_PrintString(0,"hello",24);
+    TPH_PrintString(0,"! # $ %% & ",24);
+    TPH_PrintString(0,": ; < = > ? @ A B C D E F G H I J K L M N O P Q",24);
+    TPH_PrintString(0," |||||||||| ",24);
     TPH_Esc();
     while(1) {
-        // printf("MOTO_EN : %d / %d", MOTO_EN, MOTO_EN_It);
+        // TPH_PrintString(0,"hello",16);
         os_time_dly(100);
     }
 }

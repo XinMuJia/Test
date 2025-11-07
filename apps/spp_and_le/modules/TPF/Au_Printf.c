@@ -180,6 +180,41 @@ void TPH_Loop1(void)
 		TPH_PrintNum(0);
 }
 
+//打印黑块
+void TPH_Loop2(void)
+{
+    u8 DATA1;
+	u8 data1;
+	u8	k,m;
+	TPH_EN	=	FUN_ENABLE;
+	MOTO_EN	=	FUN_ENABLE;
+	do
+	{
+	TPH_Space(32);
+	for(m=4;m>0;m--)
+		{
+			data1=0XFF;
+            // Spi_Command(data1);
+            for(k=0;k<8;k++)																//输入一个字节数据
+			{
+				DATA1=0x00;
+				if(data1	&	0x80)															//高位在前
+				{
+					DATA1=0x88;
+				}
+				TPH_WR_Byte(DATA1);
+				data1 <<= 1;
+			}
+		}
+		TPH_Space(32);
+		TPH_HLAT(Bit_RESET);																	//数据锁存
+		us_delay(LAT_TIME);
+		TPH_HLAT(Bit_SET); 
+	}while(MOTO_EN_It	==	FUN_ENABLE && MOTO_EN	==	FUN_ENABLE);
+
+		TPH_PrintNum(0);
+}
+
 /******************************************************************************
 *	函数说明：TPH打印字符函数
 *	入口数据：x		 起始坐标
@@ -200,6 +235,7 @@ void TPH_PrintChar(u16 x,u8 o,u8 chr,u8 size)
 		else if(size==32)data1=TPH_F12X24[c][o+j];
 		else return;																		//未找到相应字符大小直接返回
 	//	j==1?(k=4):(k=0);
+		us_delay(20);
 		for(k=0;k<8;k++)																    //输入一个字节数据
 		{
 			DATA1=0x00;
@@ -232,56 +268,61 @@ void 	TPH_PrintString(u16 x,char *dp,u8 size)
 	kos=0;
 	Ta=size;
 	Ta>16?(Ta=32):(Ta=16);
-	Wide=16;																	//ASCII 字符宽														
-	Tall=size;																		//ASCII 字符高
+	Wide=16;																			//ASCII 字符宽														
+	Tall=size;																			//ASCII 字符高
 	Header=x;																			//前留白
 	Column=0;																			//字符串所打印行数
-	TPH_EN	=	ENABLE;
-	MOTO_EN	=	ENABLE;	
+	TPH_EN	=	FUN_ENABLE;
+	MOTO_EN	=	FUN_ENABLE;	
 	do
 	{
-		loop=	DISABLE;															//字符串打印循环初始化
-		for(o=0;o<Tall;o++)													//打印字符高度循环
+		loop=	FUN_DISABLE;															//字符串打印循环初始化
+		for(o=0;o<Tall;o++)																//打印字符高度循环
 		{
 			k	=	Column;																//现在打印的字符寻址位
 			z	=	Header;																//行打印点数初始							
 			TPH_Space(Header);
 			while(dp[k]!='\0')												
 			{
-				TPH_PrintChar(Header,o,dp[k],Ta);			
-				k++;																		//字符寻址位计数
+				// if(TPH_Column(z,Wide) !=	FUN_ENABLE)						
+				// {
+				// 	loop	=	FUN_ENABLE;												//继续循环
+				// 	break;
+				// }
+				TPH_PrintChar(Header,o,dp[k],Ta);	
+				k++;																	//字符寻址位计数
 				z+=Wide;																//已打印行点阵数计数
-				if(kos>=200)														//当打印有效位等于96点 或者 数据传输完毕时 进行一次加热
+				if(kos>=96)																//当打印有效位等于96点 或者 数据传输完毕时 进行一次加热
 				{
-						TPH_Print1(UpStartUSART[6]-z);
+						TPH_Print1(96-z);
 						TPH_Space(z);
 						kos=0;
 				}
-				if(TPH_Column(z,0) !=	ENABLE)						
+				if(TPH_Column(z,0) !=	FUN_ENABLE)						
 				{
-					loop	=	ENABLE;												//继续循环
+					loop	=	FUN_ENABLE;												//继续循环
 					break;
 				}
 			}
 				if(TPH_LAN_TEST	==	1)
 				{
-					TPH_Space(UpStartUSART[6]-z);		
-					TPH_HLAT(Bit_SET); 											//LAN测试
+					TPH_Space(96-z);		
+					TPH_HLAT(Bit_SET); 													//LAN测试
 				}
 				else
 				{
-					TPH_Space(UpStartUSART[6]-z);		
-					TPH_HLAT(Bit_RESET);																	//数据锁存
+					TPH_Space(96-z);		
+					TPH_HLAT(Bit_RESET);																//数据锁存
 					us_delay(LAT_TIME);
 					TPH_HLAT(Bit_SET); 
 				}
-			while(MOTO_EN_It	==	ENABLE && MOTO_EN==ENABLE);
+			while(MOTO_EN_It	==	FUN_ENABLE && MOTO_EN == FUN_ENABLE);
 				
 			TPH_PrintNum(0);
 			kos=0;
 		}
 		Column	=	k;																//寻址位缓存
-	}while(loop	==	ENABLE && dp[k]!='\0');				//字符打印完毕，结束循环
+	}while(loop	==	FUN_ENABLE && dp[k]!='\0');				//字符打印完毕，结束循环
 }
 
 
