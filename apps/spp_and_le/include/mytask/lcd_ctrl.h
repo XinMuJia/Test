@@ -49,4 +49,5 @@ void LCD_Clean(void);
 void LCD_Show_String_Safe(u8 x, u8 y, const char *str, lcd_content_t content_type);
 void LCD_Clean_Safe(void);
 void LCD_Show_Number_Safe(u8 x, u8 y, u32 num, lcd_content_t content_type);
+void LCD_Show_Char_Safe(u8 x, u8 y, u8 data, lcd_content_t content_type);
 #endif  //_LCD_CTRL_H_

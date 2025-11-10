@@ -270,7 +270,6 @@ void setup_arch()
     /* log_info("resour est: %d", get_boot_flag()); */
     //set_boot_flag(99);
     /* log_info("resour est: %d", get_boot_flag()); */
-
     reset_source_dump();
 
     power_reset_src = power_reset_source_dump();

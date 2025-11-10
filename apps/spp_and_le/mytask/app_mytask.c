@@ -62,23 +62,23 @@ void my_task(void *p)
         os_time_dly(10);
     }
 
-    Init_Printer();
+    // Init_Printer();
     // for(int lps=64;lps>0;lps--)
     // {
     //     TPH_Loop2();
     // }
-    TPH_PrintString(0,"hello",24);
-    TPH_PrintString(0,"! # $ %% & ",24);
-    TPH_PrintString(0,": ; < = > ? @ A B C D E F G H I J K L M N O P Q",24);
-    TPH_PrintString(0," |||||||||| ",24);
+    // TPH_PrintString(0,"hello",24);
+    // TPH_PrintString(0,"! # $ %% & ",24);
+    // TPH_PrintString(0,": ; < = > ? @ A B C D E F G H I J K L M N O P Q",24);
     // TPH_Esc();
     while(1) {
-        // TPH_PrintString(0,"hello",16);
+        u8 i = get_adc_level(ADC_Channel_Paper_Check, Bit_SET);
+        printf( "ADC_Num= %d\n", i);
         os_time_dly(100);
     }
 }
 
-void show_battery_level(void)
+void show_battery_level(u8 is_simple)
 {
 #if TCFG_SYS_LVD_EN
     static u8 last_percentage = 0xFF;
@@ -87,9 +87,10 @@ void show_battery_level(void)
     printf("vbat==%d\n", percentage);
     if(percentage > 100) percentage = 100;
     
-    // 只在电量变化时更新
-    if(percentage != last_percentage) {
-        LCD_Show_String(1, 5, "    "); // 清理4个字符位置
+    // 只在电量变化或者页面重新加载时更新
+    if(percentage != last_percentage || is_simple) {
+        // LCD_Show_String(1, 5, "    "); // 清理4个字符位置
+        LCD_Show_String_Safe(1, 5, "    ", LCD_CONTENT_BATTERY);
         char num_str[4];
         
         // 格式化数字
@@ -104,10 +105,11 @@ void show_battery_level(void)
         for(int i = 0; i < percentage_num; i++) {
         if(num_str[i] != '\0') {
             // 从右到左显示，固定右侧对齐
-            LCD_Show_Char(1, 6 - (percentage_num - 1 - i), num_str[i]);
+            // LCD_Show_Char(1, 6 - (percentage_num - 1 - i), num_str[i]);
+            LCD_Show_Char_Safe(1, 6 - (percentage_num - 1 - i), num_str[i], LCD_CONTENT_BATTERY);
         }
     }
-        LCD_Show_Char(1, 7, '%'); // 百分号固定在最右侧
+        LCD_Show_Char_Safe(1, 7, '%', LCD_CONTENT_BATTERY); // 百分号固定在最右侧
 
         last_percentage = percentage;
     }
@@ -270,6 +272,7 @@ void Lcd_Task(void)
     LCD1602_Init();
 
     u8 last_content = 0xFF;
+    u8 is_simple = 0;
 
     // 设置系统时间
     struct sys_time new_time = {0};
@@ -285,10 +288,10 @@ void Lcd_Task(void)
         /* 只在 LCD 空闲时更新显示 */
         if (lcd_get_state() == LCD_STATE_IDLE) {
             u8 content = lcd_get_content();
-
+            is_simple = (content != last_content);
             if (content == LCD_CONTENT_NONE || content == LCD_CONTENT_BATTERY) {
                 /* 仅在从其他内容切换回来或首次进入时清屏并显示固定文本 */
-                if (content != last_content) {
+                if (is_simple) {
                     LCD_Clean_Safe();
                     LCD_Show_String_Safe(1, 0, "Bat:  ", LCD_CONTENT_BATTERY);
 
@@ -310,11 +313,12 @@ void Lcd_Task(void)
                 LCD_Show_String(0, 0, time_str);
 
                 /* 更新电量（show_battery_level 内部已做变化判断）*/
-                show_battery_level();
+                show_battery_level(is_simple);
             } else {
                 /* 如果当前不是电量页，保持 last_content 与实际同步，避免误判 */
                 last_content = content;
             }
+            is_simple = 0;
         }
 
         /* 适当休眠，降低 CPU 占用 */
@@ -322,40 +326,9 @@ void Lcd_Task(void)
     }
 }
 
-// void Adc_Get()
-// {
-//     while(1) {
-//         ADC_Num[0] = get_vbat_percent();
-//         os_time_dly(5);
-//         ADC_Num[1] = get_adc_level(ADC_Channel_Paper_Check, Bit_RESET);
-//         // ADC_Num[1] = adc_get_value(ADC_Channel_Paper_Check);
-//         printf("ADC_Num[0]: %d, ADC_Num[1]: %d\n", ADC_Num[0], ADC_Num[1]);
-//         os_time_dly(5); // 100ms
-//     }
-// }
-
-// void Adc_Get()
-// {
-//     static u8 adc_channel = 0;
-    
-//     while(1) {
-//         switch(adc_channel) {
-//         case 0:
-//             ADC_Num[0] = get_vbat_percent();
-//             break;
-//         case 1:
-//             ADC_Num[1] = get_adc_level(ADC_Channel_Paper_Check, Bit_RESET);
-//             break;
-//         }
-        
-//         adc_channel = (adc_channel + 1) % 2;
-//         printf("ADC_Num[0]: %d, ADC_Num[1]: %d\n", ADC_Num[0], ADC_Num[1]);
-//         os_time_dly(5); // 50ms
-//     }
-// }
-
 void Task_Init(void)
 {
+    clr_wdt();
     /* os_task_create(app_main_task, (void *)0, TASK_APP_MAIN_NAME); */
     // 创建检测开机按键线程，使用任务表配置参数
     // os_task_create( Adc_Get ,

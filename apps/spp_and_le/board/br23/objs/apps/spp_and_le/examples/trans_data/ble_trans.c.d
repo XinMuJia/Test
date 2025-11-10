@@ -157,4 +157,8 @@ objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o: \
   ../../../../include_lib/btstack/third_party/common\ble_config.h \
   ../../../../apps/spp_and_le/examples/trans_data/ble_trans.h \
   ../../../../apps/spp_and_le/examples/trans_data/ble_trans_profile.h \
-  ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h
+  ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_TPG_Front.h

@@ -376,7 +376,6 @@ void Init_Printer(void)
     TPH_EN	=	FUN_ENABLE;
 	MOTO_EN	=	FUN_ENABLE;	
 	res	=	0;
-    os_time_dly(50);
 }
 
 void TPH_Esc(void)
@@ -390,6 +389,13 @@ void TPH_Esc(void)
     os_time_dly(10);
 }
 
+
+void TPH_Start(void)
+{
+		TPH_EN_It	= 	FUN_ENABLE;
+		MOTO_EN_It 	= 	FUN_ENABLE;
+		Digital_Write_Vhen(PIN_VHEN, HIGH);
+}
 
 /******************************************************************************
 *	函数说明：TPH打印开始

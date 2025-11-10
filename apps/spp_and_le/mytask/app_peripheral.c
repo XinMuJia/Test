@@ -39,6 +39,6 @@ void Peripheral_Init(void)
 {
     UpStart();
     Pump_Init();
-    timer3_init(200); // 初始化定时器3，200us中断
+    timer3_init(100); // 初始化定时器3，100us中断
     adc_add_sample_ch(ADC_Channel_Paper_Check);
 }

@@ -70,7 +70,6 @@ ___interrupt static void timer_isr()
 // 	USER_TIMER->PRD = 580;//65535 == 11ms 596 == 100us
 // 	request_irq(USER_TIMER_IRQ, 3, timer_isr, 0);
 // 	USER_TIMER->CON = BIT(0)|BIT(3)|BIT(4);//BIT(0)定时计数模式 BIT(3):晶振为时钟源 BIT(4):4 分频
-//     printf("PRD : %d / %d", USER_TIMER->PRD, clk_get("timer"));
 // }
 
 // 指定传入的微秒数，初始化定时器3
@@ -84,7 +83,8 @@ void timer3_init(u32 usec)
     // 每个计数周期的时间为 4/timer_clk 秒
     // 要实现usec微秒定时，需要的计数次数为: usec * (timer_clk/4) / 1000000
     // 简化为: (usec * timer_clk) / 4000000
-    u32 prd = (timer_clk / 4000000) * usec; // 计算周期值，防止溢出
+    // u32 prd = (timer_clk / 4000000) * usec; // 计算周期值，防止溢出
+    u32 prd = (u64)usec * (timer_clk / 4) / 1000000;
     
     // 限制PRD值在16位范围内
     if (prd > 65535) {
@@ -92,15 +92,23 @@ void timer3_init(u32 usec)
     } else if (prd == 0) {
         prd = 1; // 最小值
     }
+    // 先禁用定时器
+    USER_TIMER->CON = 0;
     
     USER_TIMER->CON = BIT(14); // 清除pending位
     USER_TIMER->CNT = 0;       // 清零计数器
     USER_TIMER->PRD = prd;     // 设置周期值
     
+    // 配置定时器但不使能
+    USER_TIMER->CON = BIT(3)|BIT(4);  // 时钟源+分频
+
     request_irq(USER_TIMER_IRQ, 3, timer_isr, 0);
     
-    // 配置定时器: 定时计数模式 | 晶振为时钟源 | 4分频
-    USER_TIMER->CON = BIT(0)|BIT(3)|BIT(4);
+    // // 配置定时器: 定时计数模式 | 晶振为时钟源 | 4分频
+    // USER_TIMER->CON = BIT(0)|BIT(3)|BIT(4);
+
+    // 最后使能定时器
+    USER_TIMER->CON |= BIT(0);
 }
 
 void us_delay_us(unsigned int us)
@@ -141,7 +149,7 @@ void us_delay_us(unsigned int us)
 void Paper_Check_Timer_Callback(void const *arg)
 {
     u32 adc_value = get_adc_level(ADC_Channel_Paper_Check, Bit_RESET);
-    
+
     // 增加有效性检查
     if(adc_value == 0) {
         // 可能是采样未完成，暂时忽略本次采样

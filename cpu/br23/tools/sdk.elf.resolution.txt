@@ -2522,7 +2522,7 @@ objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o
 -r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,strlen,l
 -r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,LCD_Clean,l
 -r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,sprintf,l
--r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,LCD_Show_String,l
+-r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,TPH_PrintString,l
 -r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,ble_gatt_server_set_adv_config,l
 -r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,puts,l
 -r=objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o,trans_server_init_cfg,pl
@@ -3495,14 +3495,13 @@ objs/cpu/br23/uart_test.c.o
 objs/apps/spp_and_le/mytask/app_mytask.c.o
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,my_task,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,os_time_dly,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Init_Printer,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,TPH_PrintString,l
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,get_adc_level,l
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,printf,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,show_battery_level,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,get_vbat_percent,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,printf,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_String,l
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_String_Safe,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,sprintf,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_Char,l
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_Char_Safe,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Lcd_Task,pl
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,init_software_rtc,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,log_print,l
@@ -3511,9 +3510,10 @@ objs/apps/spp_and_le/mytask/app_mytask.c.o
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,lcd_get_state,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,lcd_get_content,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Clean_Safe,l
--r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_String_Safe,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,get_current_time,l
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,LCD_Show_String,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,Task_Init,pl
+-r=objs/apps/spp_and_le/mytask/app_mytask.c.o,clr_wdt,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,os_task_create,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,task_info_add,l
 -r=objs/apps/spp_and_le/mytask/app_mytask.c.o,poweron_detected,pl
@@ -3550,6 +3550,7 @@ objs/apps/spp_and_le/mytask/lcd_ctrl.c.o
 -r=objs/apps/spp_and_le/mytask/lcd_ctrl.c.o,log_print,l
 -r=objs/apps/spp_and_le/mytask/lcd_ctrl.c.o,LCD_Clean_Safe,pl
 -r=objs/apps/spp_and_le/mytask/lcd_ctrl.c.o,LCD_Show_Number_Safe,pl
+-r=objs/apps/spp_and_le/mytask/lcd_ctrl.c.o,LCD_Show_Char_Safe,pl
 -r=objs/apps/spp_and_le/mytask/lcd_ctrl.c.o,os_time_dly,l
 -r=objs/apps/spp_and_le/mytask/lcd_ctrl.c.o,gpio_write,l
 -r=objs/apps/spp_and_le/mytask/lcd_ctrl.c.o,puts,l
@@ -3581,7 +3582,6 @@ objs/apps/spp_and_le/mytask/app_event.c.o
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,handle_hold,pl
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,handle_key_release,pl
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,key_event_handler,pl
--r=objs/apps/spp_and_le/mytask/app_event.c.o,clr_wdt,l
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,printf,l
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,app_main_init,pl
 -r=objs/apps/spp_and_le/mytask/app_event.c.o,register_sys_event_handler,l
@@ -3639,9 +3639,10 @@ objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_Print1,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Init_Printer,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Init_Motor,l
--r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,os_time_dly,l
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_Esc,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Motor_Write,l
+-r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,os_time_dly,l
+-r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,TPH_Start,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,addTime,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,Heat_Density,pl
 -r=objs/apps/spp_and_le/modules/TPF/Au_Printf.c.o,UpStartUSART,l

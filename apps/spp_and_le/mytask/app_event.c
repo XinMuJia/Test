@@ -10,6 +10,7 @@
 #include "mytask/lcd_ctrl.h"
 #include "event.h"
 #include "mytask/app_peripheral.h"
+#include "TPH/Au_Config.h"
 
 
 // 添加日志系统定义
@@ -110,7 +111,7 @@ void handle_single_click(u8 key_value)
             LCD_Clean_Safe();
             // 切换气泵状态
             Pump_State.pump_state = !Pump_State.pump_state; // 0: 关闭, 1: 打开
-            gpio_direction_output(IO_PORTB_02, Pump_State.pump_state); // 控制气泵开关
+            // gpio_direction_output(IO_PORTB_02, Pump_State.pump_state); // 控制气泵开关
 
             if(Pump_State.pump_state) { 
                 rtc_port_pr_out(IO_PORTR_00, OUT_HIGH); // 关闭电磁阀
@@ -122,7 +123,7 @@ void handle_single_click(u8 key_value)
                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
 
                 rtc_port_pr_out(IO_PORTR_00, OUT_HIGH); // 打开电磁阀
-                os_time_dly(200);
+                os_time_dly(200); // 等待电磁阀关闭2s
                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
             }
             
@@ -171,7 +172,7 @@ void handle_key_release(u8 key_value)
 void key_event_handler(struct sys_event *event)
 {
     // 添加喂狗操作，防止处理过程中看门狗超时
-    clr_wdt();
+    // clr_wdt();
 
     printf("Key event detected:\n");
     // local_irq_disable();  // 禁用中断

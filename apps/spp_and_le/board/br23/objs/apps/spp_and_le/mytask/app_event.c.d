@@ -125,4 +125,6 @@ objs/apps/spp_and_le/mytask/app_event.c.o: \
   ../../../../include_lib/driver/cpu/br23\asm/power/p33.h \
   ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
   ../../../../apps/spp_and_le/include\mytask/app_peripheral.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
   ../../../../include_lib/system\debug.h

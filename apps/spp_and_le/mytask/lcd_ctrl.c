@@ -341,3 +341,32 @@ void LCD_Show_Number_Safe(u8 x, u8 y, u32 num, lcd_content_t content_type)
     
     lcd_set_state(LCD_STATE_IDLE);
 }
+
+
+// LCD1602显示字符 (Safe version with state machine and mutex)
+void LCD_Show_Char_Safe(u8 x, u8 y, u8 data, lcd_content_t content_type)
+{
+    // 1. 检查 LCD 是否已初始化完成
+    if (!lcd_init_complete || !lcd_can_print()) {
+        log_info("LCD busy, skip print");
+        return;
+    }
+
+    // 2. 设置 LCD 状态为正在打印 (PRINTING)
+    lcd_set_state(LCD_STATE_PRINTING);
+    // 3. 设置 LCD 当前显示内容的类型
+    lcd_set_content(content_type);
+
+    // 4. 获取 LCD 互斥锁，防止多个任务同时访问 LCD 硬件
+    os_mutex_pend(&lcd_mutex, 0);
+
+    // 5. 执行实际的 LCD 操作
+    LCD_Set_Cursor(x, y);       // 设置光标位置
+    LCD_Write_Data(data);       // 写入字符数据
+
+    // 6. 释放 LCD 互斥锁
+    os_mutex_post(&lcd_mutex);
+
+    // 7. 操作完成，将 LCD 状态设置回空闲 (IDLE)
+    lcd_set_state(LCD_STATE_IDLE);
+}

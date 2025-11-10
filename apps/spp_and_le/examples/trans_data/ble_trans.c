@@ -35,6 +35,7 @@
 
 // 文件下级头文件
 #include "mytask/lcd_ctrl.h"
+#include "TPH/Au_Printf.h"
 
 #if CONFIG_APP_SPP_LE
 
@@ -660,7 +661,11 @@ static int trans_att_write_callback(hci_con_handle_t connection_handle, uint16_t
         // 方法1: 显示数据长度
         char display_buf[32];
         sprintf(display_buf, "RX:%d bytes", buffer_size);
-        LCD_Show_String(0, 0, display_buf);
+        // LCD_Show_String(0, 0, buffer);
+        // Init_Printer();
+        TPH_PrintString(0,buffer,24);
+        // TPH_Esc();
+        memset(buffer, 0, 32);
 
         //收发测试，自动发送收到的数据;for test
         if (ble_comm_att_check_send(connection_handle, buffer_size) && \
