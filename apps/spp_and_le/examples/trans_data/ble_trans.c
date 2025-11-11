@@ -655,17 +655,17 @@ static int trans_att_write_callback(hci_con_handle_t connection_handle, uint16_t
     case ATT_CHARACTERISTIC_ae03_01_VALUE_HANDLE:
         log_info("\n-ae03_rx(%d):", buffer_size);
         put_buf(buffer, buffer_size);
-        LCD_Clean();
+        // LCD_Clean_Safe();
         // LCD_Set_Cursor(0, 0);
         // sprintf(buffer, "-ae03_rx:%d", buffer_size);
         // 方法1: 显示数据长度
         char display_buf[32];
         sprintf(display_buf, "RX:%d bytes", buffer_size);
-        // LCD_Show_String(0, 0, buffer);
-        // Init_Printer();
+        // LCD_Show_String_Safe(0, 0, display_buf);
+        TPH_Start();
         TPH_PrintString(0,buffer,24);
-        // TPH_Esc();
         memset(buffer, 0, 32);
+        TPH_Esc();
 
         //收发测试，自动发送收到的数据;for test
         if (ble_comm_att_check_send(connection_handle, buffer_size) && \

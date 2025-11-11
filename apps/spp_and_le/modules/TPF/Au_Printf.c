@@ -125,12 +125,12 @@ static void Digital_Write_Vhen(int pin,int PinState){
  */
 static void Set_Stb_Unable(void)
 {
-    Digital_Write(PIN_STB1, HIGH); // 高电平失能
-    Digital_Write(PIN_STB2, LOW);
-    Digital_Write(PIN_STB3, LOW);
-    Digital_Write(PIN_STB4, LOW);
-    Digital_Write(PIN_STB5, LOW);
-    Digital_Write(PIN_STB6, LOW);
+    Digital_Write(PIN_STB1, LOW); // 高电平失能
+    // Digital_Write(PIN_STB2, LOW);
+    // Digital_Write(PIN_STB3, LOW);
+    // Digital_Write(PIN_STB4, LOW);
+    // Digital_Write(PIN_STB5, LOW);
+    // Digital_Write(PIN_STB6, LOW);
 }
 
 /*
@@ -366,7 +366,6 @@ void	TPH_Print1(u16 x)
  */
 void Init_Printer(void)
 {
-    Init_Motor(); // 初始化电机
     Set_Stb_Unable(); // 失能所有通道
     Digital_Write(PIN_LAT, HIGH); // 锁存引脚高电平
     gpio_direction_output(GPIO_Port_TPH_DI, LOW); // 数据引脚低电平
@@ -386,7 +385,6 @@ void TPH_Esc(void)
 	// MOTOR_STEP(0x06);	
     // 电机归零/释放
     MOTOR_STEP(0x00);  // 所有相位断电
-    os_time_dly(10);
 }
 
 

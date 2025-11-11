@@ -42,8 +42,9 @@ void LCD_Show_String(u8 x, u8 y, const char *str);
 void LCD_Show_Char(u8 x, u8 y, u8 data);
 void LCD_Show_Number(u8 x, u8 y, u32 num);
 void LCD_Show_Num(u8 x, u8 y, u8 num);
-void LCD_Clear(void);
-void LCD_Clean(void);
+// void LCD_Clear(void);
+// void LCD_Clean(void);
+void LCD_Clean_Line_Safe(u8 line);
 
 // 状态机使用的函数声明
 void LCD_Show_String_Safe(u8 x, u8 y, const char *str, lcd_content_t content_type);

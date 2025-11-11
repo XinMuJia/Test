@@ -55,7 +55,6 @@ void handle_long_press(u8 key_value)
         log_info("+");
         if(!poweron_detected) {
             set_key_poweron_flag(1); 
-
             // 开机
             rtc_port_pr_out(IO_PORTR_01, OUT_HIGH);
 
@@ -65,6 +64,7 @@ void handle_long_press(u8 key_value)
             log_info("-");
             set_key_poweron_flag(0); 
             rtc_port_pr_out(IO_PORTR_01, OUT_LOW);
+            power_set_soft_poweroff();
             poweron_detected = 0;
         }
         #endif
@@ -108,19 +108,21 @@ void handle_single_click(u8 key_value)
     switch (key_value)
     {
         case 5:
-            LCD_Clean_Safe();
             // 切换气泵状态
             Pump_State.pump_state = !Pump_State.pump_state; // 0: 关闭, 1: 打开
-            // gpio_direction_output(IO_PORTB_02, Pump_State.pump_state); // 控制气泵开关
+            // os_time_dly(2);
+            gpio_direction_output(IO_PORTB_02, Pump_State.pump_state); // 控制气泵开关
 
             if(Pump_State.pump_state) { 
+                LCD_Clean_Safe();
                 rtc_port_pr_out(IO_PORTR_00, OUT_HIGH); // 关闭电磁阀
                 LCD_Show_String_Safe(0, 0, "Pump: ON", LCD_CONTENT_PUMP_ON);
                 LCD_Show_String_Safe(1, 0, "Time: 0 s", LCD_CONTENT_TIME);
                 Pump_State.id = sys_timer_add(NULL, pump_time_update, 1000); // 1s周期更新
             } else {
                 sys_timer_del(Pump_State.id); // 停止定时器
-                LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
+                LCD_Show_String_Safe(0, 6, "OFF", LCD_CONTENT_NONE);
+                LCD_Clean_Line_Safe(1);
 
                 rtc_port_pr_out(IO_PORTR_00, OUT_HIGH); // 打开电磁阀
                 os_time_dly(200); // 等待电磁阀关闭2s

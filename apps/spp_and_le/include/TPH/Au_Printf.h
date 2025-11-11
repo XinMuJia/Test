@@ -53,5 +53,6 @@ void Digital_Write(int pin, int pinState);
 void TPH_PrintChar(u16 x,u8 o,u8 chr,u8 size);
 void TPH_PrintString(u16 x,char *dp,u8 size);
 void TPH_Print1(u16 x);
+void TPH_Start(void);
 
 #endif  //__AU_PRINTF_H__

@@ -87,13 +87,13 @@ const struct task_info task_info_table[] = {
     {"my_task",         4,     0,   256,   128  },
 #endif
 
-// 定义线程 获取ADC的值
+// 定义线程 用来打印
 #if TCFG_POWER_ON_NEED_KEY
-    {"Adc_Get",  4,     0,   256,   0    }, 
+    {"Print_Task",  5,     0,   256,   0    }, 
 #endif
 
 // 定义lcd1602任务
-    {"Lcd_Task",      5,     0,   256,   64    },
+    {"Lcd_Task",      4,     0,   256,   64    },
 
     {"app_loop_select",           5,     0,   512,   128  },
 

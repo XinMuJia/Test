@@ -55,16 +55,68 @@ ___interrupt static void timer_isr()
 
     // 打印头控制
     TPH_Check();
+}
+
+___interrupt static void timer2_isr()
+{
+    // 清除中断标志位 (Pending bit)
+    JL_TIMER2->CON |= BIT(14); 
 
     // 电机控制
     Moto_Check();
 }
 
+/*
+ * @brief  初始化定时器2
+ * @param  usec: 定时周期，单位为微秒
+ * @return none
+ * @note   配置定时器2以指定微秒为周期产生中断
+ *         定时器2的寄存器地址为 JL_TIMER2，中断号为 IRQ_TIME2_IDX
+ */
+void timer2_init(u32 usec)
+{
+    // 获取定时器时钟频率
+    u32 timer_clk = clk_get("timer");
+    
+    // 计算周期值: 
+    // 定时器时钟源经过4分频，所以实际频率为timer_clk/4
+    // 每个计数周期的时间为 4/timer_clk 秒
+    u32 prd = (u64)usec * (timer_clk / 4) / 1000000;
+    
+    // 限制PRD值在16位范围内
+    if (prd > 65535) {
+        prd = 65535; // 最大值
+    } else if (prd == 0) {
+        prd = 1; // 最小值
+    }
+    
+    // 先禁用定时器
+    JL_TIMER2->CON = 0;
+    
+    // 清除pending位
+    JL_TIMER2->CON = BIT(14); 
+    // 清零计数器
+    JL_TIMER2->CNT = 0;       
+    // 设置周期值
+    JL_TIMER2->PRD = prd;     
+    
+    // 配置定时器但不使能: 时钟源+分频 (4分频)
+    // BIT(3): 选择晶振作为时钟源 (具体位定义需参考芯片手册)
+    // BIT(4): 4 分频
+    JL_TIMER2->CON = BIT(3)|BIT(4);  
+
+    // 注册中断处理函数
+    request_irq(IRQ_TIME2_IDX, 3, timer2_isr, 0);
+    
+    // 最后使能定时器 (BIT(0): 定时计数模式使能)
+    JL_TIMER2->CON |= BIT(0);
+}
+
+
 // void timer3_init(u32 usec)
 // {
 // 	static u32 prd = 0;
 // 	//prd = clk_get("timer")/4000000 * usec;
-// 	printf("PRD : %d / %d", prd, clk_get("timer"));
 // 	USER_TIMER->CON = BIT(14);//清pending
 //     USER_TIMER->CNT = 0;
 // 	USER_TIMER->PRD = 580;//65535 == 11ms 596 == 100us

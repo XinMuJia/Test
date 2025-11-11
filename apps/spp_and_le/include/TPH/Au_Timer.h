@@ -41,5 +41,6 @@ void Paper_Check_Timer_Callback(void const *arg);
 
 // 定时器3初始化
 void timer3_init(u32 usec);
+void timer2_init(u32 usec);
 
 #endif // AU_TIMER_H

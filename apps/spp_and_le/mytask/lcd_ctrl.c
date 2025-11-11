@@ -146,12 +146,12 @@ void LCD_Show_Number(u8 x, u8 y, u32 num)
     os_mutex_post(&lcd_mutex);
 }
 
-// 清屏函数
-void LCD_Clear(void)
-{
-    LCD_Write_Command(0x01); // 清屏命令
-    lcd_delay_ms(10); // 清屏需要较长时间
-}
+// // 清屏函数
+// void LCD_Clear(void)
+// {
+//     LCD_Write_Command(0x01); // 清屏命令
+//     lcd_delay_ms(10); // 清屏需要较长时间
+// }
 
 // 液晶初始化函数 - 对应原LCD1602_Init（改为4位模式）
 void LCD1602_Init(void)
@@ -208,12 +208,12 @@ void LCD1602_Init(void)
 }
 
 // 清屏函数
-void LCD_Clean(void)
-{
-    os_mutex_pend(&lcd_mutex, 0);
-    LCD_Clear();
-    os_mutex_post(&lcd_mutex);
-}
+// void LCD_Clean(void)
+// {
+//     os_mutex_pend(&lcd_mutex, 0);
+//     LCD_Clear();
+//     os_mutex_post(&lcd_mutex);
+// }
 
 // 简化版显示数字
 void LCD_Show_Num(u8 x, u8 y, u8 num)
@@ -320,6 +320,40 @@ void LCD_Clean_Safe(void)
     
     lcd_set_state(LCD_STATE_IDLE);
     lcd_set_content(LCD_CONTENT_NONE);
+}
+
+// LCD 清除单行函数 (Safe version with state machine and mutex)
+void LCD_Clean_Line_Safe(u8 line)
+{
+    u8 i; // 循环变量，用于写入空格
+
+    // 1. 检查 LCD 是否已初始化完成
+    if (!lcd_init_complete) {
+        log_info("LCD not init, skip clean line");
+        return;
+    }
+
+    // 2. 设置 LCD 状态为正在清理 (CLEANING)
+    lcd_set_state(LCD_STATE_CLEANING);
+
+    // 3. 获取 LCD 互斥锁，防止多个任务同时访问 LCD 硬件
+    os_mutex_pend(&lcd_mutex, 0);
+
+    // 4. 执行实际的 LCD 清行操作
+    // 4.1 将光标移动到指定行的开始位置 (列 0)
+    LCD_Set_Cursor(line, 0); // 假设 line 0 是第一行，line 1 是第二行
+
+    // 4.2 连续写入 16 个空格 (假设 LCD 是 16x2 的)
+    //     如果是其他尺寸的 LCD (如 20x4)，需要相应调整循环次数
+    for (i = 0; i < 16; i++) {
+        LCD_Write_Data(' '); // 写入一个空格字符
+    }
+
+    // 5. 释放 LCD 互斥锁
+    os_mutex_post(&lcd_mutex);
+
+    // 6. 操作完成，将 LCD 状态设置回空闲 (IDLE)
+    lcd_set_state(LCD_STATE_IDLE);
 }
 
 // 显示数字函数

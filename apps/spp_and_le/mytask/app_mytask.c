@@ -36,11 +36,8 @@ extern u8 lcd_init_complete;
 extern bool Printer_Timeout;
 extern u8 percentage;
 
-// 打印缓存
-char TPH_Cache[10][24];
-
-// ADC获取
-u16	 ADC_Num[3];
+// 打印机
+u8 print_data_flag = 1;
 
 // 长度
 u8 	TPH_LAN_TEST;	
@@ -62,18 +59,12 @@ void my_task(void *p)
         os_time_dly(10);
     }
 
-    // Init_Printer();
-    // for(int lps=64;lps>0;lps--)
-    // {
-    //     TPH_Loop2();
-    // }
-    // TPH_PrintString(0,"hello",24);
-    // TPH_PrintString(0,"! # $ %% & ",24);
-    // TPH_PrintString(0,": ; < = > ? @ A B C D E F G H I J K L M N O P Q",24);
-    // TPH_Esc();
     while(1) {
         u8 i = get_adc_level(ADC_Channel_Paper_Check, Bit_SET);
-        printf( "ADC_Num= %d\n", i);
+        u8 j = get_adc_level(ADC_Channel_Paper_Check2, Bit_SET);
+        // u8 i = adc_get_voltage(ADC_Channel_Paper_Check);
+        // u8 j = adc_get_voltage(ADC_Channel_Paper_Check2);
+        printf("ADC_Num = %d\n %d\n", i, j);
         os_time_dly(100);
     }
 }
@@ -132,7 +123,7 @@ void show_battery_level(u8 is_simple)
             
 //             // 连续按键1s以上，按键开机
 //             if (delay_10ms_cnt > 100 && !poweron_detected) { //1s
-//                 set_key_poweron_flag(1); 
+                // set_key_poweron_flag(1); 
 
 //                 // 开机
 //                 gpio_direction_output(IO_PORTB_11, 1);     
@@ -273,7 +264,6 @@ void Lcd_Task(void)
 
     u8 last_content = 0xFF;
     u8 is_simple = 0;
-
     // 设置系统时间
     struct sys_time new_time = {0};
     new_time.year = 2025;
@@ -310,7 +300,8 @@ void Lcd_Task(void)
                         current_time.sec);
 
                 // 在第一行显示时间
-                LCD_Show_String(0, 0, time_str);
+                // LCD_Show_String(0, 0, time_str);
+                LCD_Show_String_Safe(0, 0, time_str, LCD_CONTENT_BATTERY);
 
                 /* 更新电量（show_battery_level 内部已做变化判断）*/
                 show_battery_level(is_simple);
@@ -322,6 +313,30 @@ void Lcd_Task(void)
         }
 
         /* 适当休眠，降低 CPU 占用 */
+        os_time_dly(10);
+    }
+}
+
+// 创建一个任务，用于打印数据
+void Print_Task(void)
+{
+    /* 等待开机完成再初始化 LCD */
+    while (!poweron_detected) {
+        os_time_dly(10);
+    }
+
+    Init_Printer();
+    while (1) {
+        if(print_data_flag) {
+            for(int lps=64;lps>0;lps--)
+            {
+                TPH_Loop2();
+            }
+            TPH_PrintString(0,": ; < = > ? @ A B C D E F G H I J K L M N O P Q",24);
+            print_data_flag = 0;
+            TPH_Esc();
+        }
+
         os_time_dly(100);
     }
 }
@@ -331,12 +346,12 @@ void Task_Init(void)
     clr_wdt();
     /* os_task_create(app_main_task, (void *)0, TASK_APP_MAIN_NAME); */
     // 创建检测开机按键线程，使用任务表配置参数
-    // os_task_create( Adc_Get ,
-    //               (void *)0,
-    //               task_info_table[9].prio,
-    //               task_info_table[9].stack_size,
-    //               0,
-    //               task_info_table[9].name);
+    os_task_create( Print_Task ,
+                    (void *)0,
+                    task_info_table[9].prio,
+                    task_info_table[9].stack_size,
+                    0,
+                    task_info_table[9].name);
 
     os_task_create( my_task,
                     (void *)0,
