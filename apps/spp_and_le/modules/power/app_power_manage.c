@@ -153,6 +153,7 @@ u8 get_vbat_percent(void)
 {
     u16 tmp_bat_val;
     u16 bat_val = get_vbat_level();
+    printf("bat_val = %d\n", bat_val);
     if (battery_full_value == 0) {
 #if TCFG_CHARGE_ENABLE
         battery_full_value = (get_charge_full_value() - 100) / 10; //防止部分电池充不了这么高电量，充满显示未满的情况

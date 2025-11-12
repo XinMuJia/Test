@@ -27,6 +27,8 @@
         "au_spi.h": "c",
         "au_printf.h": "c",
         "au_start.h": "c",
-        "au_tpg_front.h": "c"
+        "au_tpg_front.h": "c",
+        "app_action.h": "c",
+        "app_queue.h": "c"
     }
 }

@@ -127,4 +127,5 @@ objs/apps/spp_and_le/mytask/app_event.c.o: \
   ../../../../apps/spp_and_le/include\mytask/app_peripheral.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
   ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
+  ../../../../apps/spp_and_le/include\mytask/app_queue.h \
   ../../../../include_lib/system\debug.h

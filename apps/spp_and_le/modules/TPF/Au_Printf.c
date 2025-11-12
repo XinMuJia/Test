@@ -393,6 +393,7 @@ void TPH_Start(void)
 		TPH_EN_It	= 	FUN_ENABLE;
 		MOTO_EN_It 	= 	FUN_ENABLE;
 		Digital_Write_Vhen(PIN_VHEN, HIGH);
+		res	=	0;
 }
 
 /******************************************************************************

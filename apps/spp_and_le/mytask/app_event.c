@@ -11,6 +11,7 @@
 #include "event.h"
 #include "mytask/app_peripheral.h"
 #include "TPH/Au_Config.h"
+#include "mytask/app_queue.h"
 
 
 // 添加日志系统定义
@@ -97,8 +98,9 @@ void pump_time_update()
                 }
                 
                 LCD_Clean_Safe();
-                LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-                // LCD_Show_String_Safe(1, 0, "Time: 60s", LCD_CONTENT_TIME);
+                // LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
+                LCD_Show_String_Safe(0, 6, "OFF", LCD_CONTENT_NONE);
+                LCD_Clean_Line_Safe(1);
             }
         }
 }
@@ -110,8 +112,7 @@ void handle_single_click(u8 key_value)
         case 5:
             // 切换气泵状态
             Pump_State.pump_state = !Pump_State.pump_state; // 0: 关闭, 1: 打开
-            // os_time_dly(2);
-            gpio_direction_output(IO_PORTB_02, Pump_State.pump_state); // 控制气泵开关
+            // gpio_direction_output(IO_PORTB_02, Pump_State.pump_state); // 控制气泵开关
 
             if(Pump_State.pump_state) { 
                 LCD_Clean_Safe();
@@ -232,5 +233,6 @@ void app_main_init(void)
 {
     // 注册按键事件处理
     register_sys_event_handler(SYS_KEY_EVENT, DEVICE_EVENT_FROM_KEY, 0, key_event_handler);
+    ble_data_queue_init();
     // sys_hi_timer_add(NULL, key_event_handler, 50); // 每100ms检查一次按键事件(硬件定时器)
 }

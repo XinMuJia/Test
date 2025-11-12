@@ -16,6 +16,7 @@
 #include "TPH/Au_Motor.h"
 #include "TPH/Au_Printf.h"
 #include "TPH/Au_Adc.h"
+#include "mytask/app_queue.h"
 
 
 // 添加日志系统定义
@@ -35,9 +36,6 @@ volatile u8 poweron_detected = 0;
 extern u8 lcd_init_complete;
 extern bool Printer_Timeout;
 extern u8 percentage;
-
-// 打印机
-u8 print_data_flag = 1;
 
 // 长度
 u8 	TPH_LAN_TEST;	
@@ -60,10 +58,8 @@ void my_task(void *p)
     }
 
     while(1) {
-        u8 i = get_adc_level(ADC_Channel_Paper_Check, Bit_SET);
-        u8 j = get_adc_level(ADC_Channel_Paper_Check2, Bit_SET);
-        // u8 i = adc_get_voltage(ADC_Channel_Paper_Check);
-        // u8 j = adc_get_voltage(ADC_Channel_Paper_Check2);
+        u32 i = get_adc_level(ADC_Channel_Paper_Check, Bit_RESET);
+        u32 j = get_adc_level(ADC_Channel_Paper_Check2, Bit_RESET);
         printf("ADC_Num = %d\n %d\n", i, j);
         os_time_dly(100);
     }
@@ -106,149 +102,6 @@ void show_battery_level(u8 is_simple)
     }
 #endif
 }
-
-
-/* 检查开机键   */
-// void check_power_on_key()
-// {
-// #if TCFG_POWER_ON_NEED_KEY
-//     u32 delay_10ms_cnt = 0;
-//     while (1) {
-//         clr_wdt();
-//         os_time_dly(1);
-//         extern u8 get_power_on_status(void);
-//         if (get_power_on_status()) {
-//             log_info("+");
-//             delay_10ms_cnt++;
-            
-//             // 连续按键1s以上，按键开机
-//             if (delay_10ms_cnt > 100 && !poweron_detected) { //1s
-                // set_key_poweron_flag(1); 
-
-//                 // 开机
-//                 gpio_direction_output(IO_PORTB_11, 1);     
-//                 gpio_write(IO_PORTB_11, 1);
-//                 log_info("is poweron");
-//                 delay_10ms_cnt = 0;
-//                 poweron_detected = 1;
-//                 return;
-//                 // 关机检测：开机后继续长按2秒关机
-//             } else if (delay_10ms_cnt > 200 && poweron_detected) { 
-//                 log_info("Power off key detected\n");
-//                 poweron_detected = 0;
-//                 delay_10ms_cnt = 0;
-//                 power_set_soft_poweroff();
-//                 gpio_direction_output(IO_PORTB_11, 0); 
-//                 return;
-//             }
-//         }
-//     }
-// #endif
-// }
-
-// void PowerOnKey_Task(void)
-// {
-//     while (1) {
-//         check_power_on_key();
-
-//         os_time_dly(100);  // 避免任务频繁运行
-//     }
-// }
-
-
-/* 循环选择 */
-// void app_loop_select(void)
-// {
-//     u8 loop_sel = 0;
-//     u8 pump_state = 0; // 0: 关闭, 1: 打开
-//     u32 press_time = 0;
-//     u32 seconds = 0;
-
-//     while(!poweron_detected || !lcd_init_complete) {
-//         os_time_dly(10); // 等待开机按键检测完成
-//     }
-
-//     /* 基础配置 */
-//     gpio_direction_input(IO_PORTB_04); // 配置为输入
-//     gpio_direction_output(IO_PORTB_02, 0); // 初始化气泵为关闭状态
-
-//     // 设置PR1为数字IO模式
-//     p33_tx_1byte(R3_OSL_CON, 0);
-//     rtc_port_pr_die(IO_PORTR_00, 1);
-
-//     /* 选择APP */
-//     while (1) {
-//         // loop_sel = get_check_status() - 1; 
-//         loop_sel = io_get_key_value();//用于读取按键状态选择APP
-//         log_info("APP_LOOP_SEL: %d", loop_sel);
-//         switch (loop_sel) {
-//         case 4:
-//             LCD_Clean_Safe();
-//             // 切换气泵状态
-//             pump_state = !pump_state;
-//             if(pump_state) { // 次序问题
-//                 rtc_port_pr_out(IO_PORTR_00, OUT_HIGH);
-//                 LCD_Show_String_Safe(0, 0, "Pump: ON", LCD_CONTENT_PUMP_ON);
-//                 LCD_Show_String_Safe(1, 0, "Time: 0 s", LCD_CONTENT_TIME);
-//             } else {
-//                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
-//                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-//             }
-
-//             gpio_direction_output(IO_PORTB_02, pump_state);
-//             press_time = 0; // 重置计时器
-//             break;
-
-//         case 5:
-//             // 关闭气泵(通过气压开关判断)
-//             if(pump_state) { // 只有在开启状态下才响应关闭
-//                 pump_state = 0;
-//                 gpio_direction_output(IO_PORTB_02, pump_state);
-//                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
-
-//                 // 等待LCD空闲
-//                 while (lcd_is_printing()) {
-//                     os_time_dly(10);
-//                 }
-                
-//                 LCD_Clean_Safe();
-//                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-//             }
-//             break;
-//         }
-
-//         // 气泵运行时，每秒更新一次时间显示
-//         if(pump_state) {
-//             press_time++;
-//             // 每1000ms(10个100ms周期)更新一次LCD显示
-//             if(press_time % 10 == 0) {
-//                 seconds = press_time / 10;
-//                 LCD_Show_Number_Safe(1, 6, seconds, LCD_CONTENT_TIME);
-//             }
-            
-//             // 超过60s自动退出
-//             if(seconds > 60) {
-//                 pump_state = 0;
-//                 press_time = 0;
-//                 seconds = 0;
-//                 gpio_direction_output(IO_PORTB_02, pump_state);
-
-//                 // 设置PR1为数字IO模式
-//                 rtc_port_pr_out(IO_PORTR_00, OUT_LOW);
-
-//                 // 等待LCD空闲
-//                 while (lcd_is_printing()) {
-//                     os_time_dly(10);
-//                 }
-                
-//                 LCD_Clean_Safe();
-//                 LCD_Show_String_Safe(0, 0, "Pump: OFF", LCD_CONTENT_NONE);
-//                 // LCD_Show_String_Safe(1, 0, "Time: 60s", LCD_CONTENT_TIME);
-//             }
-//         }
-//         os_time_dly(10);
-//     }
-// }
 
 
 void Lcd_Task(void)
@@ -320,6 +173,13 @@ void Lcd_Task(void)
 // 创建一个任务，用于打印数据
 void Print_Task(void)
 {
+    // clr_wdt(); // 清除看门狗  
+
+    char ble_data[256];
+    uint16_t data_length;
+    uint16_t data_handle;
+    u8 print_data_flag = 1;
+
     /* 等待开机完成再初始化 LCD */
     while (!poweron_detected) {
         os_time_dly(10);
@@ -327,7 +187,9 @@ void Print_Task(void)
 
     Init_Printer();
     while (1) {
+        // 测试打印
         if(print_data_flag) {
+            TPH_Start();
             for(int lps=64;lps>0;lps--)
             {
                 TPH_Loop2();
@@ -335,6 +197,17 @@ void Print_Task(void)
             TPH_PrintString(0,": ; < = > ? @ A B C D E F G H I J K L M N O P Q",24);
             print_data_flag = 0;
             TPH_Esc();
+        }
+
+        // 打印BLE数据
+        if(ble_data_dequeue(ble_data, &data_length, &data_handle)) {
+            ble_data[data_length] = '\0';
+            printf("ble_data_dequeue: %d\n", data_length);
+            printf("ble_data_dequeue: %s\n", ble_data);
+            TPH_Start();
+            TPH_PrintString(0, ble_data, data_length);
+            TPH_Esc();
+            memset(ble_data, 0, sizeof(ble_data));
         }
 
         os_time_dly(100);

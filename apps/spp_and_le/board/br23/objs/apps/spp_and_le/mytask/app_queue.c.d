@@ -1,6 +1,6 @@
-objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o: \
-  ../../../../apps/spp_and_le/examples/trans_data/ble_trans.c \
-  ../../../../include_lib\system/app_core.h \
+objs/apps/spp_and_le/mytask/app_queue.c.o: \
+  ../../../../apps/spp_and_le/mytask/app_queue.c \
+  ../../../../apps/spp_and_le/include\mytask/app_queue.h \
   ../../../../include_lib/system/generic\typedef.h \
   ../../../../include_lib/driver/cpu/br23\asm/cpu.h \
   ../../../../include_lib/driver/cpu/br23\asm/br23.h \
@@ -28,11 +28,13 @@ objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o: \
   C:/JL/pi32/pi32v2-include\sys/_stdint.h \
   C:/JL/pi32/pi32v2-include\machine/types.h \
   ../../../../include_lib\system/malloc.h \
-  ../../../../include_lib/system/generic/list.h \
-  ../../../../include_lib\system/event.h \
-  ../../../../include_lib/system/generic/rect.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
+  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
   ../../../../include_lib\system/includes.h \
   ../../../../include_lib/system/init.h \
+  ../../../../include_lib/system/event.h \
+  ../../../../include_lib/system/generic/list.h \
+  ../../../../include_lib/system/generic/rect.h \
   ../../../../include_lib/system/spinlock.h \
   ../../../../include_lib/system/generic\cpu.h \
   ../../../../include_lib/system/generic\irq.h \
@@ -57,6 +59,7 @@ objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o: \
   ../../../../include_lib/system/os/FreeRTOS/list.h \
   ../../../../include_lib/system/timer.h \
   ../../../../include_lib/system/wait.h \
+  ../../../../include_lib/system/app_core.h \
   ../../../../include_lib/system/app_msg.h \
   ../../../../include_lib/system/database.h \
   ../../../../include_lib/system/fs/fs.h \
@@ -107,59 +110,4 @@ objs/apps/spp_and_le/examples/trans_data/ble_trans.c.o: \
   ../../../../include_lib/driver/cpu/br23\asm/timer.h \
   ../../../../include_lib/driver/cpu/br23\asm/rtc.h \
   ../../../../include_lib/driver/cpu/br23\asm/mcpwm.h \
-  ../../../../include_lib/driver\device/sdio_host_init.h \
-  ../../../../apps/spp_and_le/include\app_config.h \
-  ../../../../apps/spp_and_le/board/br23\board_config.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_demo_cfg.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_demo_global_build_cfg.h \
-  ../../../../apps/common/device/usb\usb_std_class_def.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_fmy_cfg.h \
-  ../../../../apps/spp_and_le/board/br23/board_ac635n_fmy_global_build_cfg.h \
-  ../../../../apps/common/device/usb\usb_common_def.h \
-  ../../../../include_lib/btctrler\btcontroller_mode.h \
-  ../../../../apps/spp_and_le/include/user_cfg_id.h \
-  ../../../../apps/spp_and_le/include\app_action.h \
-  ../../../../include_lib\btstack/btstack_task.h \
-  ../../../../include_lib\btstack/bluetooth.h \
-  ../../../../include_lib/btstack/le/ble_data_types.h \
-  ../../../../include_lib/btstack/le/ble_api.h \
-  ../../../../include_lib\btstack/btstack_typedef.h \
-  ../../../../include_lib/btstack/le/le_user.h \
-  ../../../../include_lib/btstack/le/att.h \
-  ../../../../include_lib/btstack/le/gatt.h \
-  ../../../../include_lib/btstack/le/sm.h \
-  ../../../../include_lib/btstack/btstack_event.h \
-  ../../../../include_lib/system\user_cfg.h \
-  ../../../../include_lib/system/device\vm.h \
-  ../../../../include_lib/btctrler\btcontroller_modules.h \
-  ../../../../include_lib/btctrler/hci_transport.h \
-  ../../../../include_lib/btctrler/ble/hci_ll.h \
-  C:/JL/pi32/pi32v2-include\stdlib.h \
-  C:/JL/pi32/pi32v2-include\machine/stdlib.h \
-  C:/JL/pi32/pi32v2-include\alloca.h \
-  ../../../../include_lib/btctrler/classic/hci_lmp.h \
-  ../../../../apps/common/include\bt_common.h \
-  ../../../../apps/spp_and_le/include\lib_profile_cfg.h \
-  ../../../../apps/common/third_party_profile/common\3th_profile_api.h \
-  ../../../../apps/common/third_party_profile/jieli\le_common.h \
-  ../../../../include_lib\btstack/le/le_common_define.h \
-  ../../../../apps/common/third_party_profile/jieli/JL_rcsp\rcsp_bluetooth.h \
-  ../../../../include_lib/btstack/third_party/common\spp_user.h \
-  ../../../../apps/common/third_party_profile/jieli/JL_rcsp/rcsp_msg.h \
-  ../../../../include_lib/btstack/third_party/common\ble_user.h \
-  ../../../../include_lib/btstack/third_party/rcsp\JL_rcsp_api.h \
-  ../../../../apps/common/third_party_profile/common\custom_cfg.h \
-  ../../../../apps/common/third_party_profile/jieli\gatt_common/le_gatt_common.h \
-  ../../../../apps/common/third_party_profile/jieli\le_client_demo.h \
-  ../../../../include_lib/btctrler/port/br23\btcontroller_config.h \
-  ../../../../include_lib/btctrler\ble/ll_config.h \
-  ../../../../include_lib/btctrler\classic/lmp_config.h \
-  ../../../../include_lib/btstack/third_party/common\ble_config.h \
-  ../../../../apps/spp_and_le/examples/trans_data/ble_trans.h \
-  ../../../../apps/spp_and_le/examples/trans_data/ble_trans_profile.h \
-  ../../../../apps/spp_and_le/include\mytask/lcd_ctrl.h \
-  ../../../../apps/spp_and_le/include\mytask/app_queue.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Config.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Timer.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_Printf.h \
-  ../../../../apps/spp_and_le/include\TPH/Au_TPG_Front.h
+  ../../../../include_lib/driver\device/sdio_host_init.h

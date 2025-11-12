@@ -18,7 +18,7 @@ struct Au_ID
 };
 
 // 进纸检测相关变量
-#define PAPER_THRESHOLD 550
+#define PAPER_THRESHOLD 200//550
 #define PAPER_COUNT_THRESHOLD 100
 
 extern struct Au_ID au_id;

@@ -35,6 +35,7 @@
 
 // 文件下级头文件
 #include "mytask/lcd_ctrl.h"
+#include "mytask/app_queue.h"
 #include "TPH/Au_Printf.h"
 
 #if CONFIG_APP_SPP_LE
@@ -655,17 +656,22 @@ static int trans_att_write_callback(hci_con_handle_t connection_handle, uint16_t
     case ATT_CHARACTERISTIC_ae03_01_VALUE_HANDLE:
         log_info("\n-ae03_rx(%d):", buffer_size);
         put_buf(buffer, buffer_size);
-        // LCD_Clean_Safe();
-        // LCD_Set_Cursor(0, 0);
-        // sprintf(buffer, "-ae03_rx:%d", buffer_size);
         // 方法1: 显示数据长度
         char display_buf[32];
         sprintf(display_buf, "RX:%d bytes", buffer_size);
         // LCD_Show_String_Safe(0, 0, display_buf);
-        TPH_Start();
-        TPH_PrintString(0,buffer,24);
+        // 将数据放入队列，供其他任务处理
+        ble_data_enqueue(buffer, buffer_size, handle);
+    //     if (buffer_size <= 240) { // 确保消息大小合理
+    //     // 动态分配内存保存数据
+    //     uint8_t *data_copy = malloc(buffer_size);
+    //     if (data_copy) {
+    //         memcpy(data_copy, buffer, buffer_size);
+    //         // 发送消息到打印任务
+    //         os_taskq_post("Print_Task", 4, 0x1001, handle, buffer_size, (int)data_copy);
+    //     }
+    // }
         memset(buffer, 0, 32);
-        TPH_Esc();
 
         //收发测试，自动发送收到的数据;for test
         if (ble_comm_att_check_send(connection_handle, buffer_size) && \
